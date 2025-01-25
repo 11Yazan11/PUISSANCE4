@@ -2,8 +2,8 @@
 
 *Jeu de Puissance 4*
 
-## INFORMATIONS {language 🇫🇷}
+## INFORMATIONS (🇫🇷)
 
-## INFORMATION {language 🇬🇧}
+## INFORMATION (🇬🇧)
 
 *Not available yet*
