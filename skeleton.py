@@ -13,20 +13,22 @@ def affiche_grille(tab:list, joueur=None, egalite=False) -> None:
     #IL EST POSSIBLE D'UTILISER CETTE METHODE POUR SEULEMENT AFFICHER LA GRILLE SANS DEMANDE DE JEU
     separator_length = ((w * 4) + 1)
     os.system('cls' if os.name == 'nt' else 'clear')  # Efface l'écran pour une mise à jour visuelle
+    print('\033[1;35m<PROJECT GALAXY MADNESS>\033[0m')
+    print()
     print('-' * separator_length) # Ligne de séparation initiale
     print('+' + ('---+' * w)) # Ligne de spéparation intermédaire
     for row in tab:
         if egalite:
-            print('\033[1;33m| ' + ' | '.join(" " if int(cell)==0 else "X" if int(cell)==1 else "O" for cell in row) + ' |')
+            print('\033[1;33m| ' + ' | '.join(" " if int(cell)==0 else "\033[2;36mX\033[0m" if int(cell)==1 else "\033[2;31mO\033[0m" for cell in row) + ' |')
             print('+' + ('---+' * w)) # Ligne de spéparation intermédaire
         else:
-            print('| ' + ' | '.join(" " if int(cell)==0 else "X" if int(cell)==1 else "O" for cell in row) + ' |')
+            print('| ' + ' | '.join(" " if int(cell)==0 else "\033[2;36mX\033[0m" if int(cell)==1 else "\033[2;31mO\033[0m" for cell in row) + ' |')
             print('+' + ('---+' * w)) # Ligne de spéparation intermédaire
 
     print('\033[0m-' * separator_length)  # Ligne de séparation finale
     print()
-    print("Player 1 : X ")
-    print("Player 2 : O")
+    print("Player 1 : \033[2;36mX\033[0m")
+    print("Player 2 : \033[2;31mO\033[0m")
     print()
 
 
