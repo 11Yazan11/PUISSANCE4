@@ -1,5 +1,4 @@
 # IMPORTS
-import math
 import os
 import time
 #----------
@@ -18,15 +17,18 @@ def affiche_grille(tab:list, joueur=None, egalite=False) -> None:
     print('+' + ('---+' * w)) # Ligne de spéparation intermédaire
     for row in tab:
         if egalite:
-            print('\033[1;33m| ' + ' | '.join(str(cell) for cell in row) + ' |')
+            print('\033[1;33m| ' + ' | '.join(" " if int(cell)==0 else "X" if int(cell)==1 else "O" for cell in row) + ' |')
             print('+' + ('---+' * w)) # Ligne de spéparation intermédaire
         else:
-            print('| ' + ' | '.join(str(cell) for cell in row) + ' |')
+            print('| ' + ' | '.join(" " if int(cell)==0 else "X" if int(cell)==1 else "O" for cell in row) + ' |')
             print('+' + ('---+' * w)) # Ligne de spéparation intermédaire
 
     print('\033[0m-' * separator_length)  # Ligne de séparation finale
     print()
+    print("Player 1 : X ")
+    print("Player 2 : O")
     print()
+
 
     # Demander à l'utilisateur de saisir une colonne
     # Texte coloré dans le terminal
