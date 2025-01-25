@@ -15,9 +15,19 @@ def affiche_grille(tab:list) -> None:
     print('-' * separator_length) # Ligne de séparation initiale
     print('+' + ('---+' * w)) # Ligne de spéparation intermédaire
     for row in tab:
-        print('| ' + ' | '.join('X' if int(cell) == 1 else 'R' if int(cell) == 2 else '0' for cell in row) + ' |')
+        print('| ' + ' | '.join(str(cell) for cell in row) + ' |')
         print('+' + ('---+' * w)) # Ligne de spéparation intermédaire
     print('-' * separator_length)  # Ligne de séparation finale
+    print()
+    print()
+
+    # Demander à l'utilisateur de saisir une colonne
+    # Texte coloré dans le terminal
+    print(f"\033[1;31mLe joueur {turn} doit donner une colonne dans laquelle placer son jeton. (de 0 à {w-1}) : \033[0m")
+    colonne = int(input(">>> "))
+    return colonne
+
+
 
 def colonne_libre(tab:list, colonne_index:int) -> bool:
     """Fonction qui renvoie un booléen indiquant s'il est possible de mettre un jeton dans la colonne (indique si la colonne n'est pas pleine)"""
@@ -60,6 +70,19 @@ def diagonale(tab:list, joueur:int) -> bool:
 
 def gagne(tab:list, joueur:int) -> bool:
     """Fonction qui renvoie True si le joueur a gagné"""
+
+    # Pour l'instant, les conditions ci-dessous ne chequent pas des victoires doubles ou triples.
+    if horizontale(game_grid,turn):
+        print(f"VICTOIRE HORIZONTALE DU JOUEUR {turn}")
+        return True
+    elif verticale(game_grid,turn):
+        print(f"VICTOIRE VERTICALE DU JOUEUR {turn}")
+        return True
+    elif diagonale(game_grid, turn):
+        print(f"VICTOIRE DIAGONALE DU JOUEUR {turn}")
+        return True
+    else:
+        return False
     
 
 def tour_joueur():
@@ -77,6 +100,7 @@ def jouer():
 # CONSTANTES ET VARIABLES
 w = 7
 h = 6
+turn = 1
 game_grid = grille_init(w, h)
 #----------
 
@@ -84,8 +108,7 @@ game_grid = grille_init(w, h)
 # JEU ET BOUCLE DE JEU
 if __name__ == "__main__":
     affiche_grille(game_grid)
-    while True:
-        pass 
+    jouer(game_grid)
         
 
         
