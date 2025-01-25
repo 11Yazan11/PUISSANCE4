@@ -11,6 +11,8 @@
 
 ## INFORMATIONS (🇫🇷)
 
+*Pas encore disponible*
+
 ## INFORMATION (🇬🇧)
 
 *Not available yet*
