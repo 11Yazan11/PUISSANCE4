@@ -1,5 +1,6 @@
 # IMPORTS
 import math
+import os
 #----------
 
 # CONSTANTES ET VARIABLES
