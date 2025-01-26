@@ -12,6 +12,7 @@ class Main:
         self.fps = 60
         self.clock = pygame.time.Clock()
         self.playInstance = Game(self)
+        self.jetons = []
 
     
     def __drawElems__(self, elems):
@@ -55,12 +56,17 @@ class Main:
         menu_data = menu.__getInfo__()
         self.window.fill(menu_data['Bg'])
         pygame.display.set_caption(f'PROJECT GALAXY MADNESS - {menu_data['Name']}')
+        if self.location == "INGAME":
+            self.playInstance.update()
+            for bixel in self.jetons:
+                bixel.update()
         self.__drawElems__(menu_data['Elements'])
         self.clock.tick(self.fps)
 
     def __listenToEvents__(self):
         for event in pygame.event.get():
-            self.playInstance.__handle_event__(event)
+            if self.location == "INGAME":
+                self.playInstance.__handle_event__(event)
             if event.type == pygame.QUIT:
                 self.running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
