@@ -11,6 +11,7 @@ class Main:
         self.location = 'WELCOME'
         self.fps = 60
         self.clock = pygame.time.Clock()
+        self.playInstance = Game(self)
 
     
     def __drawElems__(self, elems):
@@ -59,6 +60,7 @@ class Main:
 
     def __listenToEvents__(self):
         for event in pygame.event.get():
+            self.playInstance.__handle_event__(event)
             if event.type == pygame.QUIT:
                 self.running = False
             if event.type == pygame.MOUSEBUTTONDOWN:

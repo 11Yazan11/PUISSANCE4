@@ -16,7 +16,7 @@ class Menu:
            Renders a 2D menu UI object that can be clickable.
         """
 
-        self.all_objects.append({"ogX":data['x'], "ogY":data['y'],"attributes":pygame.Rect(data["x"], data["y"], data["w"], data["h"]), "color":data["c"], "texture":data["t"], "vector": [data["vecxy"][0], data["vecxy"][1]], "limit":data["lim"],"clickable":clickable})
+        self.all_objects.append({"ogX":data['x'], "ogY":data['y'],"attributes":pygame.Rect(data["x"], data["y"], data["w"], data["h"]), "color":data["c"], "texture":data["t"], "name":data["name"], "vector": [data["vecxy"][0], data["vecxy"][1]], "limit":data["lim"],"clickable":clickable})
 
     def __getInfo__(self):
         return {'Id':id(self),'Name':self.name, 'Bg':self.bg, 'Elements':self.all_objects}
