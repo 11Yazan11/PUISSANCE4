@@ -1,6 +1,5 @@
 from menues import Menu
 import os
-
 script_dir = os.path.dirname(__file__)
 
 
@@ -35,7 +34,14 @@ INGAMEMENU_OBJS =  [shade(i) for i in range(0, 60)] + \
                    [[76, 500, 448, 40, (50, 60, 10), False, None, (0, 0)]] + \
                    [[80 + (440/7)*i-2, 100, 4, 400, (30, 30, 30), False, None, (0, 0)] for i in range(1, 7)] + \
                    [[80, 100 + (400/6)*i-2, 440, 4, (30, 30, 30), False, None, (0, 0)] for i in range(1, 6)] + \
-                   [[680, 40, 150, 150, (0, 0, 0), False, os.path.join(script_dir, "..", "images", "moon.png"), (0, 0)]] 
+                   [[680, 40, 150, 150, (0, 0, 0), False, os.path.join(script_dir, "..", "images", "moon.png"), (0, 0)]] +\
+                   [[560, 360, 300, 180, (43, 10, 1), False, None, (0, 0)]] + \
+                   [[570, 370, 10, 10, (191, 105, 19), False, None, (0, 0)]] + \
+                   [[570, 520, 10, 10, (191, 105, 19), False, None, (0, 0)]] + \
+                   [[840, 520, 10, 10, (191, 105, 19), False, None, (0, 0)]] + \
+                   [[840, 370, 10, 10, (191, 105, 19), False, None, (0, 0)]] + \
+                   [[560, 360, 300, 180, (25, 10, 6), False, None, (0, 0), (0, 0), 'border']] + \
+                   [[10, 10, 80, 30, (10, 10, 107), True, None, (0, 0)]] #EXIT BUTTON 
 for obj in INGAMEMENU_OBJS:
     INGAMEMENU.__addObject__({"x":obj[0], "y":obj[1],
                                "w":obj[2], "h":obj[3],
@@ -43,4 +49,8 @@ for obj in INGAMEMENU_OBJS:
                                "vecxy":obj[7], "lim":obj[-1] if len(obj) == 9 else obj[-2] if len(obj) == 10 else None,
                                "name":obj[-1] if len(obj) == 10 else None}, 
                                clickable=obj[5])
+    INGAMEMENU.__addText__('EXIT', 30, 18, 'red', 20)
+    INGAMEMENU.__addText__("Beige: Joueur 1", 600, 400, (82, 71, 64), 20)
+    INGAMEMENU.__addText__("Violet: Joueur 2", 600, 430, (40, 27, 56), 20)
+    INGAMEMENU.__addText__("C'est au joueur ... de jouer !", 600, 470, (156, 110, 65), 20)
 ALL_MENUS = [WELCOMEMENU, INGAMEMENU]

@@ -9,10 +9,16 @@ class Main:
         self.window = pygame.display.set_mode((wnw, wnh))
         self.running = True
         self.location = 'WELCOME'
+        self.font_cache = {}
         self.fps = 60
         self.clock = pygame.time.Clock()
         self.playInstance = Game(self)
         self.jetons = []
+
+    def get_font(self, size):
+        if size not in self.font_cache:
+            self.font_cache[size] = pygame.font.Font(None, size)
+        return self.font_cache[size]
 
     
     def __drawElems__(self, elems):
@@ -20,7 +26,10 @@ class Main:
             attr = elem['attributes']
             color = elem['color']
             if elem['texture'] is None:
-                pygame.draw.rect(self.window, color, (attr.x, attr.y, attr.w, attr.h))
+                if elem['name'] == "border":
+                    pygame.draw.rect(self.window, color, (attr.x, attr.y, attr.w, attr.h), 10)
+                else:
+                    pygame.draw.rect(self.window, color, (attr.x, attr.y, attr.w, attr.h))
             else:
                 try:
                     texture = pygame.image.load(elem['texture']).convert_alpha()
@@ -45,9 +54,13 @@ class Main:
 
             elem["attributes"].x += elem["vector"][0]
             elem["attributes"].y += elem["vector"][1]
-            
 
-   
+    def __drawTexts__(self, texts):
+        for text in texts:
+            updated_text = text['string'].replace('...', str(self.playInstance.turn))
+            font = self.get_font(text['size'])
+            surf_text = font.render(updated_text, True, text['color'])
+            self.window.blit(surf_text, (text['x'], text['y'])) 
 
 
 
@@ -61,6 +74,7 @@ class Main:
             for bixel in self.jetons:
                 bixel.update()
         self.__drawElems__(menu_data['Elements'])
+        self.__drawTexts__(menu_data['Texts'])
         self.clock.tick(self.fps)
 
     def __listenToEvents__(self):
