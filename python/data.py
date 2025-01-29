@@ -9,8 +9,11 @@ WELCOMEMENU_OBJS = [[10, 0, 880, 10, (0, 0, 0), False, None, (0, 0)],
                     [890, 0, 10, 590, (0, 0, 0), False, None, (0, 0)],
                     [0, 590, 900, 10, (0, 0, 0), False, None, (0, 0)],
                     [400, 250, 100, 100, 'black', True, os.path.join(script_dir, "..", "images", "play.png"), (0, 0)]]
-for obj in WELCOMEMENU_OBJS:
-    WELCOMEMENU.__addObject__({"x":obj[0], "y":obj[1],
+def reinitWelcome():
+    global WELCOMEMENU
+    WELCOMEMENU = Menu('WELCOME', (10, 10, 10))
+    for obj in WELCOMEMENU_OBJS:
+        WELCOMEMENU.__addObject__({"x":obj[0], "y":obj[1],
                                "w":obj[2], "h":obj[3],
                                "c":obj[4], "t":obj[6],
                                "vecxy":obj[7], "lim":obj[-1] if len(obj) == 9 else obj[-2] if len(obj) == 10 else None,
@@ -42,15 +45,23 @@ INGAMEMENU_OBJS =  [shade(i) for i in range(0, 60)] + \
                    [[840, 370, 10, 10, (191, 105, 19), False, None, (0, 0)]] + \
                    [[560, 360, 300, 180, (25, 10, 6), False, None, (0, 0), (0, 0), 'border']] + \
                    [[10, 10, 80, 30, (10, 10, 107), True, None, (0, 0)]] #EXIT BUTTON 
-for obj in INGAMEMENU_OBJS:
-    INGAMEMENU.__addObject__({"x":obj[0], "y":obj[1],
+
+def reinitIngame():
+    global INGAMEMENU
+    INGAMEMENU = Menu('INGAME', (5, 8, 15))
+    for obj in INGAMEMENU_OBJS:
+        INGAMEMENU.__addObject__({"x":obj[0], "y":obj[1],
                                "w":obj[2], "h":obj[3],
                                "c":obj[4], "t":obj[6],
                                "vecxy":obj[7], "lim":obj[-1] if len(obj) == 9 else obj[-2] if len(obj) == 10 else None,
                                "name":obj[-1] if len(obj) == 10 else None}, 
                                clickable=obj[5])
-    INGAMEMENU.__addText__('EXIT', 30, 18, 'red', 20)
-    INGAMEMENU.__addText__("Beige: Joueur 1", 600, 400, (82, 71, 64), 20)
-    INGAMEMENU.__addText__("Violet: Joueur 2", 600, 430, (40, 27, 56), 20)
-    INGAMEMENU.__addText__("C'est au joueur ... de jouer !", 600, 470, (156, 110, 65), 20)
+        INGAMEMENU.__addText__('EXIT', 30, 18, 'red', 20)
+        INGAMEMENU.__addText__("Beige: Joueur 1", 600, 400, (82, 71, 64), 20)
+        INGAMEMENU.__addText__("Violet: Joueur 2", 600, 430, (40, 27, 56), 20)
+        INGAMEMENU.__addText__("C'est au joueur ... de jouer !", 600, 470, (156, 110, 65), 20, True, name='Prompt')
+        INGAMEMENU.__addText__("Victoire du joueur ... !", 600, 470, 'green', 20, False, "Victory")
+
+reinitIngame()
+reinitWelcome()
 ALL_MENUS = [WELCOMEMENU, INGAMEMENU]

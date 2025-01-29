@@ -126,6 +126,7 @@ class Game:
         self.turn = 1
         self.jeton_color = lambda turn: (82, 71, 64) if turn == 1  else (40, 27, 56)
         self.game_grid = self.grille_init(7, 6)
+        self.game_over = False
 
     def horizontale(self, tab:list, joueur:int, w:int) -> bool:
             """Fonction qui renvoie True si le joueur a au moins 4 jetons alignés dans une ligne."""
@@ -176,7 +177,16 @@ class Game:
         turn = 2 if self.turn == 1 else 1
         return (self.horizontale(self.game_grid, turn, 7) or self.verticale(self.game_grid, turn, 7, 6) or self.diagonale(self.game_grid, turn, 7, 6))
     
+    def end(self):
+        self.game_over = True        
+
     def update(self):
+        if self.game_over:
+            return
+        if self.gagne():
+           tim = Delay(self.end)
+           tim.set_timeout(3)
+           return
         if self.waiting_for_cursor:
             self.cursor_timer += 1
             if self.cursor_timer >= 25:
@@ -193,18 +203,14 @@ class Game:
                 cursor['vector'] = [-self.cursorOgVector[0],self.cursorOgVector[1]] 
                 cursorExt['vector'] = [-self.cursorExtOgVector[0], self.cursorExtOgVector[1]]
     
-        if self.gagne():
-            timeout = Delay(self.endgame)
-            timeout.set_timeout(3)
+        
+           
             
 
-    def endgame(self):
-        self.main.location = 'WELCOME'
-        self.game_grid = self.grille_init(7, 6)
-        self.jetons = []
+        
 
     def __handle_event__(self, event):
-        if event.type == pygame.MOUSEBUTTONDOWN and not self.waiting_for_cursor:
+        if event.type == pygame.MOUSEBUTTONDOWN and not self.waiting_for_cursor and not self.game_over:
             if 80 < event.pos[0] < 520 and 100 < event.pos[1] < 500 and self.main.location == "INGAME":
                 elements = INGAMEMENU.__getInfo__()['Elements']
                 cursor = next((element for element in elements if element['name'] == 'cursor'), None)

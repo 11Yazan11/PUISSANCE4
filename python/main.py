@@ -14,6 +14,7 @@ class Main:
         self.clock = pygame.time.Clock()
         self.playInstance = Game(self)
         self.jetons = []
+        self.menu_data = None
 
     def get_font(self, size):
         if size not in self.font_cache:
@@ -60,19 +61,42 @@ class Main:
             updated_text = text['string'].replace('...', str(self.playInstance.turn))
             font = self.get_font(text['size'])
             surf_text = font.render(updated_text, True, text['color'])
-            self.window.blit(surf_text, (text['x'], text['y'])) 
+            if text['display']:
+                self.window.blit(surf_text, (text['x'], text['y'])) 
 
-
-
-    def __render__(self, menu):
+    def __render__(self, menu, end=False):
         pygame.display.flip()
-        menu_data = menu.__getInfo__()
+        self.menu_data = menu.__getInfo__()
+        menu_data = self.menu_data
         self.window.fill(menu_data['Bg'])
         pygame.display.set_caption(f'PROJECT GALAXY MADNESS - {menu_data['Name']}')
         if self.location == "INGAME":
+            if self.playInstance.game_over:
+                texts = self.menu_data['Texts']
+                victory_text = next((text for text in texts if text['name'] == "Victory"), None)
+                prompt_text = next((text for text in texts if text['name'] == "Prompt"), None)
+
+                if victory_text:
+                    victory_text['display'] = False
+
+                if prompt_text:
+                    prompt_text['display'] = True
+
+                
+
+                updated_text = victory_text['string'].replace('...', str(self.playInstance.turn))
+                font = self.get_font(victory_text['size'])
+                surf_text = font.render(updated_text, True, victory_text['color'])
+                self.window.blit(surf_text, (victory_text['x'], victory_text['y'])) 
+                
+                
+
+
+
             self.playInstance.update()
             for bixel in self.jetons:
                 bixel.update()
+            
         self.__drawElems__(menu_data['Elements'])
         self.__drawTexts__(menu_data['Texts'])
         self.clock.tick(self.fps)
