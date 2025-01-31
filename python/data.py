@@ -59,9 +59,14 @@ def reinitIngame():
         INGAMEMENU.__addText__('EXIT', 30, 18, 'red', 20)
         INGAMEMENU.__addText__("Beige: Joueur 1", 600, 400, (82, 71, 64), 20)
         INGAMEMENU.__addText__("Violet: Joueur 2", 600, 430, (40, 27, 56), 20)
-        INGAMEMENU.__addText__("C'est au joueur ... de jouer !", 600, 470, (156, 110, 65), 20, True, name='Prompt')
+        INGAMEMENU.__addText__("C'est au joueur ... de jouer !", 600, 470, (156, 110, 65), 20, True, 'Prompt')
         INGAMEMENU.__addText__("Victoire du joueur ... !", 600, 470, 'green', 20, False, "Victory")
 
-reinitIngame()
-reinitWelcome()
+
+def REINIT_ALL_DATA():
+    reinitIngame()
+    reinitWelcome()
+
+REINIT_ALL_DATA()
+
 ALL_MENUS = [WELCOMEMENU, INGAMEMENU]

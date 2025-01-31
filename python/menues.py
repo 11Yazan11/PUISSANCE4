@@ -26,5 +26,11 @@ class Menu:
 
     def __getInfo__(self):
         return {'Id':id(self),'Name':self.name, 'Bg':self.bg, 'Elements':self.all_objects, 'Texts':self.all_texts}
-    
+        
+    def __setInfo__(self, cat, data):
+        if cat not in ('Name', 'Bg', 'Elements', 'Texts'):
+            print('Not Valid category')
+            return
+        if cat == "Texts":
+            self.all_texts = data
         

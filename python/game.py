@@ -47,8 +47,8 @@ class Bixel:
         self.gravity = 9.81 / self.game.fps
         self.grounded = False
         self.velocity_y = 0  # Current vertical velocity
-        self.air_resistance = 0.009  # Air resistance (drag)
-        self.elasticity = 0.8  # Coefficient of restitution (bounciness)
+        self.air_resistance = 0.007  # Air resistance (drag)
+        self.elasticity = 0.4  # Coefficient of restitution (bounciness)
         self.rect = pygame.Rect(x, y, self.size[0], self.size[1])
         self.ground_level = 500-math.floor(self.size[1])
 
@@ -78,7 +78,7 @@ class Bixel:
             self.velocity_y = -self.velocity_y * self.elasticity  # Bounce back with reduced energy
             self.rect.y = self.ground_level
             # Stop tiny oscillations when nearly at rest
-            if abs(self.velocity_y) < 0.2:
+            if abs(self.velocity_y) < 0.5:
                 self.velocity_y = 0
                 self.grounded = True
         elif not self.grounded:
@@ -177,16 +177,10 @@ class Game:
         turn = 2 if self.turn == 1 else 1
         return (self.horizontale(self.game_grid, turn, 7) or self.verticale(self.game_grid, turn, 7, 6) or self.diagonale(self.game_grid, turn, 7, 6))
     
-    def end(self):
-        self.game_over = True        
 
     def update(self):
-        if self.game_over:
-            return
         if self.gagne():
-           tim = Delay(self.end)
-           tim.set_timeout(3)
-           return
+           self.game_over = True
         if self.waiting_for_cursor:
             self.cursor_timer += 1
             if self.cursor_timer >= 25:
