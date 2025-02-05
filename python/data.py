@@ -6,15 +6,13 @@ import os
 script_dir = os.path.dirname(__file__)
 
 
-WELCOMEMENU = Menu('WELCOME', (10, 10, 10), os.path.join(script_dir, "..", "images", "p4", "Menus", "base.png"))
 WELCOMEMENU_OBJS = [[10, 0, 880, 10, (0, 0, 0), False, None, (0, 0)],
                     [0, 0, 10, 590, (0, 0, 0), False, None, (0, 0)],
                     [890, 0, 10, 590, (0, 0, 0), False, None, (0, 0)],
-                    [0, 590, 900, 10, (0, 0, 0), False, None, (0, 0)],
-                    [400, 250, 100, 100, 'black', True, os.path.join(script_dir, "..", "images", "play.png"), (0, 0)]]
+                    [0, 590, 900, 10, (0, 0, 0), False, None, (0, 0)]]
 def reinitWelcome():
     global WELCOMEMENU
-    WELCOMEMENU = Menu('WELCOME', (10, 10, 10))
+    WELCOMEMENU = Menu('WELCOME', (10, 10, 10), os.path.join(script_dir, "..", "images", "p4", "Menus", "mBase.png"))
     for obj in WELCOMEMENU_OBJS:
         WELCOMEMENU.__addObject__({"x":obj[0], "y":obj[1],
                                "w":obj[2], "h":obj[3],
@@ -51,7 +49,6 @@ INGAMEMENU_OBJS =  [shade(i) for i in range(0, 60)] + \
 
 def reinitIngame():
     global INGAMEMENU
-    INGAMEMENU = Menu('INGAME', (5, 8, 15))
     for obj in INGAMEMENU_OBJS:
         INGAMEMENU.__addObject__({"x":obj[0], "y":obj[1],
                                "w":obj[2], "h":obj[3],
