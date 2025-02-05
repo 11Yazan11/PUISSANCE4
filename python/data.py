@@ -1,9 +1,12 @@
 from menues import Menu
 import os
+
+
+
 script_dir = os.path.dirname(__file__)
 
 
-WELCOMEMENU = Menu('WELCOME', (10, 10, 10))
+WELCOMEMENU = Menu('WELCOME', (10, 10, 10), os.path.join(script_dir, "..", "images", "p4", "Menus", "base.png"))
 WELCOMEMENU_OBJS = [[10, 0, 880, 10, (0, 0, 0), False, None, (0, 0)],
                     [0, 0, 10, 590, (0, 0, 0), False, None, (0, 0)],
                     [890, 0, 10, 590, (0, 0, 0), False, None, (0, 0)],

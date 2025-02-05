@@ -60,21 +60,49 @@ class Main:
         for text in texts:
             if text['string']=="C'est au joueur ... de jouer !" and self.playInstance.game_over:
                 text['display'] = False
+            if text['name']=="Victory" and self.playInstance.game_over:
+                text['string'] = f"Victoire du joueur {2 if self.playInstance.turn == 1 else 1} !"
+                text['display'] = True
+    
+
+            if text['string']=="C'est au joueur ... de jouer !" and not self.playInstance.game_over:
+                text['display'] = True
+            if text['name']=="Victory" and not self.playInstance.game_over:
+                text['string'] = f"Victoire du joueur {2 if self.playInstance.turn == 1 else 1} !"
+                text['display'] = False
+
             updated_text = text['string'].replace('...', str(self.playInstance.turn))
             font = self.get_font(text['size'])
             surf_text = font.render(updated_text, True, text['color'])
             if text['display']:
                 self.window.blit(surf_text, (text['x'], text['y'])) 
 
+    def __reinit_game__(self, bruh=None):
+        REINIT_ALL_DATA()
+        self.playInstance = Game(self)
+        self.playInstance.update()
+        self.location = "WELCOME"
+        self.jetons = []
+
     def __render__(self, menu):
         self.menu_data = menu.__getInfo__()
         menu_data = self.menu_data
         self.window.fill(menu_data['Bg'])
+        if menu_data['Img'] is not None:
+            # NOT GETTING IN HERE 
+            img = pygame.image.load(menu_data['Img']).convert_alpha()
+            img = pygame.transform.scale(img, (900, 600))
+            self.window.blit(img, (0, 0))
         pygame.display.set_caption(f'PROJECT GALAXY MADNESS - {menu_data['Name']}')
         self.playInstance.update()
         for bixel in self.jetons:
             bixel.update()
         
+        if self.playInstance.game_over:
+            timeout = Delay(self.__reinit_game__, None)
+            timeout.set_timeout(5)
+            
+           
                
         self.__drawElems__(menu_data['Elements'])
         self.__drawTexts__(menu_data['Texts'])
@@ -88,7 +116,6 @@ class Main:
                 self.running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 self.location = 'INGAME'
-
 
 
 
