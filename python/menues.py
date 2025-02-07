@@ -9,7 +9,7 @@ class Menu:
         self.all_texts = []
         self.image = image
 
-    def __addObject__(self, data, clickable=False):
+    def __addObject__(self, data, clickable=False,  dontdisplay=False):
         """Excpects a data list with req|: x, y, w, h, c, vecxy, lim. 
            w -> width;
            h -> height;
@@ -17,9 +17,11 @@ class Menu:
            t -> Texture, None if no texture, or link to the image;
            vecxy -> Tuple, Vector of movement.
            lim -> Corresponds to a range of movement.
+           Clickable excpects either False for not a button, or a function name for a button when it is clicked.
            Renders a 2D menu UI object that can be clickable.
+
         """
-        self.all_objects.append({"ogX":data['x'], "ogY":data['y'],"attributes":pygame.Rect(data["x"], data["y"], data["w"], data["h"]), "color":data["c"], "texture":data["t"], "name":data["name"], "vector": [data["vecxy"][0], data["vecxy"][1]], "limit":data["lim"],"clickable":clickable})
+        self.all_objects.append({"ogX":data['x'], "ogY":data['y'],"attributes":pygame.Rect(data["x"], data["y"], data["w"], data["h"]), "color":data["c"], "texture":data["t"], "name":data["name"], "vector": [data["vecxy"][0], data["vecxy"][1]], "limit":data["lim"],"clickable":clickable, "dontdisplay":dontdisplay})
 
     def __addText__(self, string:str, x:int, y:int, color:tuple, size:int, display:bool=True, name:str=None):
         """Displays a text at a position with a color at a certain size."""

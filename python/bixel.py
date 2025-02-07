@@ -2,7 +2,7 @@ import pygame
 import math
 
 class Bixel:
-    def __init__(self, main, x, y, color, col, grid_position):
+    def __init__(self, main, x, y, color, col, grid_position, image=None):
         """Color is a tuple or list or rgb value only."""
         self.size = (400/7,444/7+4)
         self.game = main
@@ -16,6 +16,8 @@ class Bixel:
         self.rect = pygame.Rect(x, y, self.size[0], self.size[1])
         self.ground_level = 500-math.floor(self.size[1])
         self.grid_position = grid_position
+        self.image = pygame.transform.scale(pygame.image.load(image).convert_alpha(), (self.rect.w, self.rect.h)) if image is not None else None
+       
 
     def get_ground_level(self):
         """Find the nearest object below the player in the same column."""
@@ -36,9 +38,15 @@ class Bixel:
             self.ground_level = 500 - math.floor(self.size[1])
 
     def update(self):
-        pygame.draw.rect(self.game.window, self.color, self.rect)
-        pygame.draw.rect(self.game.window, self.darken_color(self.color), self.rect, 4)
-        pygame.draw.rect(self.game.window, self.brigthen_color(self.color), self.rect, 2)
+        if self.image is not None:
+            self.game.window.blit(self.image, (self.rect.x, self.rect.y))
+        else:
+            pygame.draw.rect(self.game.window, self.color, self.rect)
+            pygame.draw.rect(self.game.window, self.darken_color(self.color), self.rect, 4)
+            pygame.draw.rect(self.game.window, self.brigthen_color(self.color), self.rect, 2)
+
+        
+
         if self.rect.y >= self.ground_level:
             self.velocity_y = -self.velocity_y * self.elasticity  # Bounce back with reduced energy
             self.rect.y = self.ground_level

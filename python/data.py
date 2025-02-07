@@ -9,7 +9,9 @@ script_dir = os.path.dirname(__file__)
 WELCOMEMENU_OBJS = [[10, 0, 880, 10, (0, 0, 0), False, None, (0, 0)],
                     [0, 0, 10, 590, (0, 0, 0), False, None, (0, 0)],
                     [890, 0, 10, 590, (0, 0, 0), False, None, (0, 0)],
-                    [0, 590, 900, 10, (0, 0, 0), False, None, (0, 0)]]
+                    [0, 590, 900, 10, (0, 0, 0), False, None, (0, 0)],
+                    [310, 358, 287, 103, (100, 0, 0), 'Btnplay', None, (0, 0), True] # add the other buttons
+                    ]
 def reinitWelcome():
     global WELCOMEMENU
     WELCOMEMENU = Menu('WELCOME', (10, 10, 10), os.path.join(script_dir, "..", "images", "p4", "Menus", "mBase.png"))
@@ -21,7 +23,7 @@ def reinitWelcome():
                                "name":obj[-1] if len(obj) == 10 else None}, 
                                clickable=obj[5])
 
-INGAMEMENU = Menu('INGAME', (5, 8, 15))
+
 shade = lambda v: [620+v, 0+v, 280-v*2, 270-v*2, (int(5+v/5), int(8+v/5), int(15+v/5)), False, None, (0, 0)]
 INGAMEMENU_OBJS =  [shade(i) for i in range(0, 60)] + \
                    [[0, 540, 1000, 60, (15, 7, 2), False, None, (0, 0)]] + \
@@ -45,10 +47,11 @@ INGAMEMENU_OBJS =  [shade(i) for i in range(0, 60)] + \
                    [[840, 520, 10, 10, (191, 105, 19), False, None, (0, 0)]] + \
                    [[840, 370, 10, 10, (191, 105, 19), False, None, (0, 0)]] + \
                    [[560, 360, 300, 180, (25, 10, 6), False, None, (0, 0), (0, 0), 'border']] + \
-                   [[10, 10, 80, 30, (10, 10, 107), True, None, (0, 0)]] #EXIT BUTTON 
+                   [[10, 10, 80, 30, (10, 10, 107), 'Btnexit', None, (0, 0)]] #EXIT BUTTON 
 
 def reinitIngame():
     global INGAMEMENU
+    INGAMEMENU = Menu('INGAME', (5, 8, 15))
     for obj in INGAMEMENU_OBJS:
         INGAMEMENU.__addObject__({"x":obj[0], "y":obj[1],
                                "w":obj[2], "h":obj[3],
@@ -63,10 +66,33 @@ def reinitIngame():
         INGAMEMENU.__addText__("Victoire du joueur ... !", 600, 470, 'green', 20, False, "Victory")
 
 
+
+GAMECHOICEMENU_OBJS = [[10, 0, 880, 10, (0, 0, 0), False, None, (0, 0)],
+                    [0, 0, 10, 590, (0, 0, 0), False, None, (0, 0)],
+                    [890, 0, 10, 590, (0, 0, 0), False, None, (0, 0)],
+                    [0, 590, 900, 10, (0, 0, 0), False, None, (0, 0)],
+                    [316, 380, 287, 102, (100, 0, 0), 'Btnpvp', None, (0, 0)],
+                    ]
+
+
+def reinitGameChoice():
+    global GAMECHOICEMENU
+    GAMECHOICEMENU = Menu('GAMECHOICE', (10, 10, 10), os.path.join(script_dir, "..", "images", "p4", "Menus", "mGameModes.png"))
+    for obj in GAMECHOICEMENU_OBJS:
+        GAMECHOICEMENU.__addObject__({"x":obj[0], "y":obj[1],
+                               "w":obj[2], "h":obj[3],
+                               "c":obj[4], "t":obj[6],
+                               "vecxy":obj[7], "lim":obj[-1] if len(obj) == 9 else obj[-2] if len(obj) == 10 else None,
+                               "name":obj[-1] if len(obj) == 10 else None}, 
+                               clickable=obj[5])
+
+
+
 def REINIT_ALL_DATA():
+    reinitGameChoice()
     reinitIngame()
     reinitWelcome()
 
 REINIT_ALL_DATA()
 
-ALL_MENUS = [WELCOMEMENU, INGAMEMENU]
+ALL_MENUS = [WELCOMEMENU, INGAMEMENU, GAMECHOICEMENU]

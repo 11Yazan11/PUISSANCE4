@@ -2,6 +2,7 @@ from data import *
 from bixel import *
 from server import *
 from delay import Delay
+script_dir = os.path.dirname(__file__)
 
 
 class Game:
@@ -131,7 +132,9 @@ class Game:
                 cursorExt['vector'] = [0,1]
                 row = next((r for r in range(5, -1, -1) if self.game_grid[r][case-1] == 0), -1)
                 col = case - 1
-                self.main.jetons.append(Bixel(self.main, ((min(max(event.pos[0]-15, 120), 484)//caseWidth)*caseWidth)+19, cursorP.y+30, self.jeton_color(self.turn), case-1, (row, col)))
+                color = 'red' if self.turn == 1 else 'blue' 
+                bixeltoappend = Bixel(self.main, ((min(max(event.pos[0]-15, 120), 484)//caseWidth)*caseWidth)+19, cursorP.y+30, self.jeton_color(self.turn), case-1, (row, col), os.path.join(script_dir, "..", "images", "p4", "skins", "goofy", f"{color}-goofy.png"))
+                self.main.jetons.append(bixeltoappend)
                 self.game_grid = self.place_jeton(self.game_grid, case-1, self.turn, 6)
                 self.turn = 1 if self.turn == 2 else 2
                 self.waiting_for_cursor = True
