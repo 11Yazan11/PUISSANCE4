@@ -18,6 +18,8 @@ class Bixel:
         self.grid_position = grid_position
         self.image = pygame.transform.scale(pygame.image.load(image).convert_alpha(), (self.rect.w, self.rect.h)) if image is not None else None
        
+    def set_image(self, link):
+        self.image = pygame.transform.scale(pygame.image.load(link).convert_alpha(), (self.rect.w, self.rect.h))
 
     def get_ground_level(self):
         """Find the nearest object below the player in the same column."""

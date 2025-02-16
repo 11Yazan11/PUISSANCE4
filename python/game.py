@@ -1,6 +1,5 @@
 from data import *
 from bixel import *
-from server import *
 from delay import Delay
 script_dir = os.path.dirname(__file__)
 
@@ -75,10 +74,12 @@ class Game:
 
     
     def change_color(self, bixel):
-        bixel.color = (0, 255, 0)  # Change color to green
+        if bixel.image is not None:
+            bixel.set_image(os.path.join(script_dir, "..", "images", "p4", "skins", "goofy", "green-goofy.png"))
+  
     def update(self):
         winning_positions = self.gagne()
-        if winning_positions:
+        if winning_positions and self.game_over == False:
             self.game_over = True
             for pos in winning_positions:
                 row, col = pos

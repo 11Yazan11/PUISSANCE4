@@ -10,7 +10,8 @@ WELCOMEMENU_OBJS = [[10, 0, 880, 10, (0, 0, 0), False, None, (0, 0)],
                     [0, 0, 10, 590, (0, 0, 0), False, None, (0, 0)],
                     [890, 0, 10, 590, (0, 0, 0), False, None, (0, 0)],
                     [0, 590, 900, 10, (0, 0, 0), False, None, (0, 0)],
-                    [310, 358, 287, 103, (100, 0, 0), 'Btnplay', None, (0, 0), True] # add the other buttons
+                    [310, 358, 287, 103, (100, 0, 0), 'Btnplay', None, (0, 0), True],
+                    [370, 120, (400/7)*3, (444/7+4)*3, (0, 0, 0), False, os.path.join(script_dir, "..", "images", "p4", "default.png"), (0, 0)],
                     ]
 def reinitWelcome():
     global WELCOMEMENU
@@ -60,7 +61,7 @@ def reinitIngame():
                                "name":obj[-1] if len(obj) == 10 else None}, 
                                clickable=obj[5])
         INGAMEMENU.__addText__('EXIT', 30, 18, 'red', 20)
-        INGAMEMENU.__addText__("Beige: Joueur 1", 600, 400, (82, 71, 64), 20)
+        INGAMEMENU.__addText__("Rouge: Joueur 1", 600, 400, (164, 40, 12), 20)
         INGAMEMENU.__addText__("Violet: Joueur 2", 600, 430, (40, 27, 56), 20)
         INGAMEMENU.__addText__("C'est au joueur ... de jouer !", 600, 470, (156, 110, 65), 20, True, 'Prompt')
         INGAMEMENU.__addText__("Victoire du joueur ... !", 600, 470, 'green', 20, False, "Victory")
