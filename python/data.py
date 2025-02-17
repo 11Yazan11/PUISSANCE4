@@ -94,6 +94,8 @@ def reinitGameChoice():
                                "name":obj[-1] if len(obj) == 10 else None}, 
                                clickable=obj[5])
     
+    GAMECHOICEMENU.__addText__('Requires internet connection ~~~', 100, 185, (20, 20, 20), 20)
+    GAMECHOICEMENU.__addText__('~~~ Requires internet connection.', 610, 315, (20, 20, 20), 20)
 
 PVEMENU_OBJS = [shadered(i) for i in range(0, 60)] + \
                    [[0, 540, 1000, 60, (15, 7, 2), False, None, (0, 0)]] + \
