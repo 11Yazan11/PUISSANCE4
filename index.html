@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Advertising Video</title>
     <style>
+        html{
+            padding-top: 50vh;
+        }
         body {
             background-color: #121212;
             color: #ffffff;
@@ -13,7 +16,7 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            overflow: hidden;
+            overflow-x: hidden;
             margin: 0;
         }
         .video-container {
@@ -21,16 +24,28 @@
         }
         video {
             width: 60%;
+            margin-bottom: 20px;
             border: 2px solid #ffffff;
             border-radius: 10px;
+        }
+        h2{
+            color:rgb(39, 39, 96);
         }
     </style>
 </head>
 <body>
     <div class="video-container">
         <h1>PROJECT GALAXY MADNESS</h1>
+        <br>
+        <h2>BV.1</h2>
         <video controls>
-            <source src="allvideos/ad_version1_.mp4" type="video/mp4">
+            <source src="allvideos/ad_betaversion1_.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+
+        <h2>BV.2</h2>
+        <video controls>
+            <source src="allvideos/ad_betaversion2_.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
     </div>

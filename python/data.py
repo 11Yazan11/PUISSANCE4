@@ -15,7 +15,7 @@ WELCOMEMENU_OBJS = [[10, 0, 880, 10, (0, 0, 0), False, None, (0, 0)],
                     ]
 def reinitWelcome():
     global WELCOMEMENU
-    WELCOMEMENU = Menu('WELCOME', (10, 10, 10), os.path.join(script_dir, "..", "images", "p4", "Menus", "mBase.png"))
+    WELCOMEMENU = Menu('WELCOME', (10, 10, 10), os.path.join(script_dir, "..", "images", "p4", "Menus", "mBase.png"), song=os.path.join(script_dir, "..", "sounds", "home.mp3"))
     for obj in WELCOMEMENU_OBJS:
         WELCOMEMENU.__addObject__({"x":obj[0], "y":obj[1],
                                "w":obj[2], "h":obj[3],
@@ -77,6 +77,8 @@ GAMECHOICEMENU_OBJS = [[10, 0, 880, 10, (0, 0, 0), False, None, (0, 0)],
                     [316, 380, 287, 102, (0, 0, 0), 'Btnpvp', None, (0, 0)],
                     [316, 155, 291, 103, (0, 0, 0), 'Btnpve', None, (0, 0)],
                     [40, 36, 83, 79, (0, 0, 0), 'Btnbfgc', None, (0, 0)],
+                    [50, 240, 200, 300, (0, 0, 0), False, os.path.join(script_dir, "..", "images", "rat-dance.png"), (0, 0)],
+                    [465, -10, 300, 300, (0, 0, 0), False, os.path.join(script_dir, "..", "images", "hat.png"), (0, 0)],
                     ]
 
 

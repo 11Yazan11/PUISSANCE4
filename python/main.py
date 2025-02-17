@@ -18,6 +18,7 @@ class Main:
         self.jetons = []
         self.can_click = True  
         self.menu_data = None
+        self.bg_music_playing = False
 
     def get_font(self, size):
         if size not in self.font_cache:
@@ -29,9 +30,13 @@ class Main:
 
     def Btnpvp(self):
         self.location = 'INGAME'
+        pygame.mixer.music.stop()
+        self.bg_music_playing = False
     
     def Btnpve(self):
         self.location = 'PVE'
+        pygame.mixer.music.stop()
+        self.bg_music_playing = False
 
     def Btnbfgc(self):
         self.location = 'WELCOME'
@@ -110,7 +115,7 @@ class Main:
                 updated_text = text['string'].replace('...', str(self.playInstance.turn)) 
             elif self.location == "PVE":
                 if text['name'] == "Prompt":
-                    updated_text = "C'est au joueur de jouer !" if self.pveInstance.turn == 1 else "C'est à l'engine de jouer !"
+                    updated_text = "C'est à vous de jouer !" if self.pveInstance.turn == 1 else "C'est à l'engine de jouer !"
                 else:
                     updated_text = text['string']
             else:
@@ -125,6 +130,8 @@ class Main:
         self.playInstance = Game(self)
         self.playInstance.update()
         self.location = "WELCOME"
+        pygame.mixer.music.stop()
+        self.bg_music_playing = False
         self.jetons = []
     
     def __reinit_PVE_game__(self):
@@ -132,6 +139,8 @@ class Main:
         self.pveInstance = PVEGame(self)
         self.pveInstance.update()
         self.location = "WELCOME"
+        pygame.mixer.music.stop()
+        self.bg_music_playing = False
         self.jetons = []
 
     def __render__(self, menu):
@@ -144,10 +153,19 @@ class Main:
             img = pygame.image.load(menu_data['Img']).convert_alpha()
             img = pygame.transform.scale(img, (900, 600))
             self.window.blit(img, (0, 0))
+        if menu_data['Sound'] is not None:
+            if not self.bg_music_playing:
+                pygame.mixer.music.load(menu_data['Sound'])
+                pygame.mixer.music.play(-1)
+                self.bg_music_playing = True
+                
         pygame.display.set_caption(f'PROJECT GALAXY MADNESS - {menu_data['Name']}')
 
         for bixel in self.jetons:
                 bixel.update()
+
+        if self.location == "WELCOME":
+            self.jetons = []
 
         if menu_data['Name'] == 'INGAME':
             self.playInstance.update()

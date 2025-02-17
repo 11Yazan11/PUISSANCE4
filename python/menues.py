@@ -2,12 +2,13 @@ import pygame
 pygame.init()
 
 class Menu:
-    def __init__(self, name, bg, image=None):
+    def __init__(self, name, bg, image=None, song=None):
         self.name = name
         self.bg = bg
         self.all_objects = []
         self.all_texts = []
         self.image = image
+        self.song = song
 
     def __addObject__(self, data, clickable=False,  dontdisplay=False):
         """Excpects a data list with req|: x, y, w, h, c, vecxy, lim. 
@@ -28,7 +29,7 @@ class Menu:
         self.all_texts.append({"string":string, "x":x, "y":y, "color":color, "size":size, "display":display, "name":name})
 
     def __getInfo__(self):
-        return {'Id':id(self),'Name':self.name, 'Bg':self.bg, 'Img':self.image, 'Elements':self.all_objects, 'Texts':self.all_texts}
+        return {'Id':id(self),'Name':self.name, 'Bg':self.bg, 'Img':self.image, 'Sound':self.song, 'Elements':self.all_objects, 'Texts':self.all_texts}
         
     def __setInfo__(self, cat, data):
         if cat not in ('Name', 'Bg', 'Elements', 'Texts'):
