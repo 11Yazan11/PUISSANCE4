@@ -9,12 +9,14 @@ class Main:
         self.window = pygame.display.set_mode((wnw, wnh))
         self.running = True
         self.location = 'WELCOME'
+        self.coins = 0
         self.font_cache = {}
         self.fps = 60
         self.clock = pygame.time.Clock()
         self.playInstance = Game(self)
+        self.pveInstance = PVEGame(self)
         self.jetons = []
-        self.clicking = True
+        self.can_click = True  
         self.menu_data = None
 
     def get_font(self, size):
@@ -27,25 +29,35 @@ class Main:
 
     def Btnpvp(self):
         self.location = 'INGAME'
+    
+    def Btnpve(self):
+        self.location = 'PVE'
+
+    def Btnbfgc(self):
+        self.location = 'WELCOME'
 
     def Btnexit(self):
         timeout = Delay(self.__reinit_game__)
+        timeoutpve = Delay(self.__reinit_PVE_game__)
+        timeoutpve.set_timeout(0.1)
         timeout.set_timeout(0.1)
 
     def __drawElems__(self, elems):
         for elem in elems:
             attr = elem['attributes']
             color = elem['color']
-
             if elem['clickable']:
-                if pygame.mouse.get_pressed()[0] and not self.clicking:
-                    self.clicking = True
+                if pygame.mouse.get_pressed()[0]:
+                    time.sleep(0.1)
+                    self.can_click = False
                     if elem['attributes'].collidepoint(pygame.mouse.get_pos()):
                        getattr(self, elem['clickable'])()
                 else:
+                    if not pygame.mouse.get_pressed()[0]:
+                        self.can_click = True
                     if elem['attributes'].collidepoint(pygame.mouse.get_pos()):
-                        pygame.draw.rect(self.window, 'black', (attr.x, attr.y, attr.w, attr.h), 4, 10) # hovering: black frame
-
+                        pygame.draw.rect(self.window, elem['color'], (attr.x, attr.y, attr.w, attr.h), 4, 10) # hovering: black frame
+ 
             else:
                 if elem['texture'] is None:
                     if elem['name'] == "border":
@@ -92,7 +104,17 @@ class Main:
                 text['string'] = f"Victoire du joueur {2 if self.playInstance.turn == 1 else 1} !"
                 text['display'] = False
 
-            updated_text = text['string'].replace('...', str(self.playInstance.turn))
+
+
+            if self.location == "INGAME":
+                updated_text = text['string'].replace('...', str(self.playInstance.turn)) 
+            elif self.location == "PVE":
+                if text['name'] == "Prompt":
+                    updated_text = "C'est au joueur de jouer !" if self.pveInstance.turn == 1 else "C'est à l'engine de jouer !"
+                else:
+                    updated_text = text['string']
+            else:
+                updated_text = text['string'].replace('€', str(self.coins))
             font = self.get_font(text['size'])
             surf_text = font.render(updated_text, True, text['color'])
             if text['display']:
@@ -102,6 +124,13 @@ class Main:
         REINIT_ALL_DATA()
         self.playInstance = Game(self)
         self.playInstance.update()
+        self.location = "WELCOME"
+        self.jetons = []
+    
+    def __reinit_PVE_game__(self):
+        REINIT_ALL_DATA()
+        self.pveInstance = PVEGame(self)
+        self.pveInstance.update()
         self.location = "WELCOME"
         self.jetons = []
 
@@ -116,16 +145,24 @@ class Main:
             img = pygame.transform.scale(img, (900, 600))
             self.window.blit(img, (0, 0))
         pygame.display.set_caption(f'PROJECT GALAXY MADNESS - {menu_data['Name']}')
-        self.playInstance.update()
+
         for bixel in self.jetons:
-            bixel.update()
-        
-        if self.playInstance.game_over:
-            timeout = Delay(self.__reinit_game__)
-            timeout.set_timeout(5)
-            
+                bixel.update()
+
+        if menu_data['Name'] == 'INGAME':
+            self.playInstance.update()
+            if self.playInstance.game_over:
+                timeout = Delay(self.__reinit_game__)
+                timeout.set_timeout(5)
+
+        if menu_data['Name'] == 'PVE':
+            self.pveInstance.update()
+            if self.pveInstance.game_over:
+                timeout = Delay(self.__reinit_PVE_game__)
+                timeout.set_timeout(5)
+
            
-               
+
         self.__drawElems__(menu_data['Elements'])
         self.__drawTexts__(menu_data['Texts'])
         self.clock.tick(self.fps)
@@ -134,6 +171,8 @@ class Main:
         for event in pygame.event.get():
             if self.location == "INGAME":
                 self.playInstance.__handle_event__(event)
+            if self.location == "PVE":
+                self.pveInstance.__handle_event__(event)
             if event.type == pygame.QUIT:
                 self.running = False
 

@@ -1,5 +1,6 @@
 import pygame
 import math
+import os
 
 class Bixel:
     def __init__(self, main, x, y, color, col, grid_position, image=None):
@@ -16,6 +17,7 @@ class Bixel:
         self.rect = pygame.Rect(x, y, self.size[0], self.size[1])
         self.ground_level = 500-math.floor(self.size[1])
         self.grid_position = grid_position
+        self.script_dir = os.path.dirname(__file__)
         self.image = pygame.transform.scale(pygame.image.load(image).convert_alpha(), (self.rect.w, self.rect.h)) if image is not None else None
        
     def set_image(self, link):

@@ -87,6 +87,8 @@ class Game:
                     if bixel.grid_position == (row, col):
                         timeout = Delay(self.change_color, bixel)
                         timeout.set_timeout(1)
+
+        
              
                         
         if self.waiting_for_cursor:
@@ -106,10 +108,10 @@ class Game:
                 cursorExt = next((element for element in elements if element['name'] == 'cursorExtension'), None)
                 cursor['vector'] = [-self.cursorOgVector[0],self.cursorOgVector[1]] 
                 cursorExt['vector'] = [-self.cursorExtOgVector[0], self.cursorExtOgVector[1]]
-    
-        
-           
             
+   
+        
+         
 
         
 

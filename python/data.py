@@ -10,7 +10,7 @@ WELCOMEMENU_OBJS = [[10, 0, 880, 10, (0, 0, 0), False, None, (0, 0)],
                     [0, 0, 10, 590, (0, 0, 0), False, None, (0, 0)],
                     [890, 0, 10, 590, (0, 0, 0), False, None, (0, 0)],
                     [0, 590, 900, 10, (0, 0, 0), False, None, (0, 0)],
-                    [310, 358, 287, 103, (100, 0, 0), 'Btnplay', None, (0, 0), True],
+                    [310, 358, 287, 103, (0, 0, 0), 'Btnplay', None, (0, 0), True],
                     [370, 120, (400/7)*3, (444/7+4)*3, (0, 0, 0), False, os.path.join(script_dir, "..", "images", "p4", "default.png"), (0, 0)],
                     ]
 def reinitWelcome():
@@ -23,9 +23,11 @@ def reinitWelcome():
                                "vecxy":obj[7], "lim":obj[-1] if len(obj) == 9 else obj[-2] if len(obj) == 10 else None,
                                "name":obj[-1] if len(obj) == 10 else None}, 
                                clickable=obj[5])
+    WELCOMEMENU.__addText__('€', 54, 29, (50, 50, 50), 60, True, 'GeneralMoneyDisplay')
 
 
 shade = lambda v: [620+v, 0+v, 280-v*2, 270-v*2, (int(5+v/5), int(8+v/5), int(15+v/5)), False, None, (0, 0)]
+shadered = lambda v: [620+v, 0+v, 280-v*2, 270-v*2, (int(35+v/5), int(8+v/5), int(15+v/5)), False, None, (0, 0)]
 INGAMEMENU_OBJS =  [shade(i) for i in range(0, 60)] + \
                    [[0, 540, 1000, 60, (15, 7, 2), False, None, (0, 0)]] + \
                    [[10, 0, 880, 10, (0, 0, 0), False, None, (0, 0)]] + \
@@ -60,11 +62,11 @@ def reinitIngame():
                                "vecxy":obj[7], "lim":obj[-1] if len(obj) == 9 else obj[-2] if len(obj) == 10 else None,
                                "name":obj[-1] if len(obj) == 10 else None}, 
                                clickable=obj[5])
-        INGAMEMENU.__addText__('EXIT', 30, 18, 'red', 20)
-        INGAMEMENU.__addText__("Rouge: Joueur 1", 600, 400, (164, 40, 12), 20)
-        INGAMEMENU.__addText__("Violet: Joueur 2", 600, 430, (40, 27, 56), 20)
-        INGAMEMENU.__addText__("C'est au joueur ... de jouer !", 600, 470, (156, 110, 65), 20, True, 'Prompt')
-        INGAMEMENU.__addText__("Victoire du joueur ... !", 600, 470, 'green', 20, False, "Victory")
+    INGAMEMENU.__addText__('EXIT', 30, 18, 'red', 20)
+    INGAMEMENU.__addText__("Rouge: Joueur 1", 600, 400, (164, 40, 12), 20)
+    INGAMEMENU.__addText__("Violet: Joueur 2", 600, 430, (40, 27, 56), 20)
+    INGAMEMENU.__addText__("C'est au joueur ... de jouer !", 600, 470, (156, 110, 65), 20, True, 'Prompt')
+    INGAMEMENU.__addText__("Victoire du joueur ... !", 600, 470, 'green', 20, False, "Victory")
 
 
 
@@ -72,7 +74,9 @@ GAMECHOICEMENU_OBJS = [[10, 0, 880, 10, (0, 0, 0), False, None, (0, 0)],
                     [0, 0, 10, 590, (0, 0, 0), False, None, (0, 0)],
                     [890, 0, 10, 590, (0, 0, 0), False, None, (0, 0)],
                     [0, 590, 900, 10, (0, 0, 0), False, None, (0, 0)],
-                    [316, 380, 287, 102, (100, 0, 0), 'Btnpvp', None, (0, 0)],
+                    [316, 380, 287, 102, (0, 0, 0), 'Btnpvp', None, (0, 0)],
+                    [316, 155, 291, 103, (0, 0, 0), 'Btnpve', None, (0, 0)],
+                    [40, 36, 83, 79, (0, 0, 0), 'Btnbfgc', None, (0, 0)],
                     ]
 
 
@@ -83,17 +87,60 @@ def reinitGameChoice():
         GAMECHOICEMENU.__addObject__({"x":obj[0], "y":obj[1],
                                "w":obj[2], "h":obj[3],
                                "c":obj[4], "t":obj[6],
+                               "vecxy":obj[7], 
+                               "lim":obj[-1] if len(obj) == 9 else obj[-2] if len(obj) == 10 else None,
+                               "name":obj[-1] if len(obj) == 10 else None}, 
+                               clickable=obj[5])
+    
+
+PVEMENU_OBJS = [shadered(i) for i in range(0, 60)] + \
+                   [[0, 540, 1000, 60, (15, 7, 2), False, None, (0, 0)]] + \
+                   [[10, 0, 880, 10, (0, 0, 0), False, None, (0, 0)]] + \
+                   [[0, 0, 10, 590, (0, 0, 0), False, None, (0, 0)]] + \
+                   [[890, 0, 10, 590, (0, 0, 0), False, None, (0, 0)]] + \
+                   [[0, 590, 900, 10, (0, 0, 0), False, None, (0, 0)]] + \
+                   [[298, -10, 4, 80, (40, 40, 0), False, None, (0, 0)]]+\
+                   [[76, 70, 448, 5, (70, 70, 0), False, None, (0, 0)]]+\
+                   [[290, 70, 20, 30, (70, 0, 0), False, None, (1, 0), (200, 10), 'cursorExtension']]+\
+                   [[285, 60, 30, 30, (100, 0, 0), False, None, (1, 0), (200, 10), 'cursor']]+\
+                   [[20+(440/7)*8-2, 100, 4, 400, (50, 20, 20), False, None, (0, 0)]] + \
+                   [[76, 100, 4, 400, (50, 20, 20), False, None, (0, 0)]] + \
+                   [[76, 500, 448, 40, (50, 60, 10), False, None, (0, 0)]] + \
+                   [[80 + (440/7)*i-2, 100, 4, 400, (30, 30, 30), False, None, (0, 0)] for i in range(1, 7)] + \
+                   [[80, 100 + (400/6)*i-2, 440, 4, (30, 30, 30), False, None, (0, 0)] for i in range(1, 6)] + \
+                   [[680, 40, 150, 150, (0, 0, 0), False, os.path.join(script_dir, "..", "images", "moon.png"), (0, 0)]] +\
+                   [[560, 360, 300, 180, (43, 10, 1), False, None, (0, 0)]] + \
+                   [[570, 370, 10, 10, (191, 105, 19), False, None, (0, 0)]] + \
+                   [[570, 520, 10, 10, (191, 105, 19), False, None, (0, 0)]] + \
+                   [[840, 520, 10, 10, (191, 105, 19), False, None, (0, 0)]] + \
+                   [[840, 370, 10, 10, (191, 105, 19), False, None, (0, 0)]] + \
+                   [[560, 360, 300, 180, (25, 10, 6), False, None, (0, 0), (0, 0), 'border']] + \
+                   [[10, 10, 80, 30, (10, 10, 107), 'Btnexit', None, (0, 0)]] #EXIT BUTTON 
+
+def reinitPVE():
+    global PVEMENU
+    PVEMENU = Menu('PVE', (35, 8, 15))
+    for obj in PVEMENU_OBJS:
+        PVEMENU.__addObject__({"x":obj[0], "y":obj[1],
+                               "w":obj[2], "h":obj[3],
+                               "c":obj[4], "t":obj[6],
                                "vecxy":obj[7], "lim":obj[-1] if len(obj) == 9 else obj[-2] if len(obj) == 10 else None,
                                "name":obj[-1] if len(obj) == 10 else None}, 
                                clickable=obj[5])
+    PVEMENU.__addText__('EXIT', 30, 18, 'red', 20)
+    PVEMENU.__addText__("Rouge: Joueur", 600, 400, (164, 40, 12), 20)
+    PVEMENU.__addText__("Violet: Engine", 600, 430, (40, 27, 56), 20)
+    PVEMENU.__addText__("C'est au joueur ... de jouer !", 600, 470, (156, 110, 65), 20, True, 'Prompt')
+    PVEMENU.__addText__("Victoire du joueur ... !", 600, 470, 'green', 20, False, "Victory")
 
 
 
 def REINIT_ALL_DATA():
     reinitGameChoice()
+    reinitPVE()
     reinitIngame()
     reinitWelcome()
 
 REINIT_ALL_DATA()
 
-ALL_MENUS = [WELCOMEMENU, INGAMEMENU, GAMECHOICEMENU]
+ALL_MENUS = [WELCOMEMENU, INGAMEMENU, GAMECHOICEMENU, PVEMENU]
