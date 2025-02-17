@@ -11,6 +11,8 @@
 
 ## INFORMATIONS (🇫🇷)
 
+<a href="https://11yazan11.github.io/PUISSANCE4/">
+
 1) Fichier squelette comportant la logique algorithmique (```skeleton.py```) : Il peut être executé seul et affiche le jeu dans la console. Ce fichier s'appuie sur les ressources présentes ici : <a href="https://kxs.fr/cours/projets/puissance-4">PROJECT_P4</a>
 2) Le reste des fichiers contribue au vrai jeu.
 3) Pour lancer le jeu:
@@ -18,6 +20,7 @@
    ```cd PUISSANCE4```
    ```pip install -r requirements.txt```
    ```python main.py```
+
    
    
    

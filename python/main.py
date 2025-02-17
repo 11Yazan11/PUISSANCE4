@@ -11,7 +11,7 @@ class Main:
         self.location = 'WELCOME'
         self.coins = 0
         self.font_cache = {}
-        self.fps = 60
+        self.fps = 70
         self.clock = pygame.time.Clock()
         self.playInstance = Game(self)
         self.pveInstance = PVEGame(self)
@@ -98,15 +98,29 @@ class Main:
         for text in texts:
             if text['string']=="C'est au joueur ... de jouer !" and self.playInstance.game_over:
                 text['display'] = False
+
             if text['name']=="Victory" and self.playInstance.game_over:
                 text['string'] = f"Victoire du joueur {2 if self.playInstance.turn == 1 else 1} !"
                 text['display'] = True
+
+            if text['name']=="Victory" and self.pveInstance.game_over:
+                if self.pveInstance.turn == 1:
+                    text['string'] = "Défaite face à l'engine!"
+                elif self.pveInstance.turn == 2:
+                    text['string'] = "Victoire face à l'engine!"
+                text['display'] = True
+            
+
     
 
             if text['string']=="C'est au joueur ... de jouer !" and not self.playInstance.game_over:
                 text['display'] = True
+
             if text['name']=="Victory" and not self.playInstance.game_over:
                 text['string'] = f"Victoire du joueur {2 if self.playInstance.turn == 1 else 1} !"
+                text['display'] = False
+
+            if text['name']=="Victory" and not self.pveInstance.game_over:
                 text['display'] = False
 
 

@@ -1,10 +1,8 @@
 from game import *
 from data import *
 from threading import *
-from together import Together
 import requests
 
-client = Together(api_key="e3f1166e1e48c5cbcb9c963fb72505ee7283c6bffdfab18abc721bb3e844635f")
 
 class PVEGame(Game):
     def __init__(self, main):
