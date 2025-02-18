@@ -7,6 +7,7 @@ SERVER_URL = "http://localhost:5000"
 script_dir = os.path.dirname(os.path.abspath(__file__))  # Get the directory of the script
 info_file_path = os.path.join(script_dir, '..', 'appdata', 'myinfo.json')
 rpldata_flag = False
+players_in_main_lobby = []
 SOCKET = None
 PLAYERID = None
 MYDATA = None
@@ -82,18 +83,21 @@ def request_player_data():
             data = json.load(file)
             plid = data.get('ID')
             SOCKET.emit("request_player_data", {"ID": plid})
-           
 
-# Step 2: Use socket.io to join the lobby
-def join_lobby():
-    # Once connected, join the lobby
-    SOCKET.emit("join_lobby", {"ID": PLAYERID})
 
-# Step 3: Set up socket.io client
+def request_inlobby_players():
+    SOCKET.emit("request_inlobby_players")
+    
+
+
+def join_main_lobby():
+    SOCKET.emit("join_main_lobby", {"ID": PLAYERID})
+    
+
 
 def run_socket_client():
     # Initialize SocketIO client 
-    global SOCKET
+    global SOCKET, players_in_main_lobby
     SOCKET = Client()
 
     
@@ -110,12 +114,22 @@ def run_socket_client():
             rpldata_flag = True
             MYDATA = data
 
+    @SOCKET.on("joined_main_lobby")
+    def on_joined_main_lobby():
+        request_inlobby_players()
+
+    @SOCKET.on("receive_inlobby_players")
+    def on_receive_inlobby_players(data):
+        global players_in_main_lobby
+        players_in_main_lobby = data
+
 
 
 
     request_player_data()
 
     SOCKET.wait()
+
 
 
 
@@ -133,6 +147,8 @@ def disconnect_from_server(player_id, socket=None):
             
     else:
         print(f"Failed to disconnect from HTTP server: {response.json()}")
+
+
 
 
 
@@ -208,6 +224,12 @@ class Main:
     
     def Btnpve(self):
         self.location = 'PVE'
+        pygame.mixer.music.stop()
+        self.bg_music_playing = False
+
+    def Btnmainlobby(self):
+        join_main_lobby()
+        self.location = 'MAINLOBBY'
         pygame.mixer.music.stop()
         self.bg_music_playing = False
 
@@ -306,7 +328,15 @@ class Main:
                 text['display'] = False
 
 
+            if self.location == "MAINLOBBY":
+                if text['name'] == "mainlobbyplayers":
+                    for player in players_in_main_lobby:
+                        PLAYERID = MYDATA['ID']
+                        if player['ID'] == PLAYERID:
+                            if player['name'] == self.name:
+                                player['name'] = f"{player['name']} (vous)"
 
+                    text['string'] = "\n".join(player['name'] for player in players_in_main_lobby)
             if self.location == "INGAME":
                 updated_text = text['string'].replace('...', str(self.playInstance.turn)) 
 
@@ -430,10 +460,12 @@ if __name__ == "__main__":
     print("Connected!")
     GameInstance = Main(900, 600, MYDATA['score'], MYDATA['money'], MYDATA['skins'], MYDATA['name'])
     while GameInstance.running:
+        PLAYERID = MYDATA['ID']
         GameInstance.__render__(next((menu for menu in ALL_MENUS if menu.__getInfo__()['Name'] == GameInstance.location), None))
         GameInstance.__listenToEvents__()
         pygame.display.flip()
 
     PLAYERID = MYDATA['ID']
     disconnect_from_server(PLAYERID, SOCKET)
+    print("Disconnected!")
     pygame.quit()
