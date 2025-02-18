@@ -6,6 +6,10 @@ SERVER_URL = "http://localhost:5000"
 
 script_dir = os.path.dirname(os.path.abspath(__file__))  # Get the directory of the script
 info_file_path = os.path.join(script_dir, '..', 'appdata', 'myinfo.json')
+rpldata_flag = False
+SOCKET = None
+PLAYERID = None
+MYDATA = None
 
 
 
@@ -30,7 +34,6 @@ def connect_to_server(player_name, player_id=None):
 
     if response.status_code == 200:
         data = response.json()
-        print(f"Connected successfully! Player ID: {data.get('ID')}, Name: {data.get('name')}")
         return data  # Returning player data for further use (ID, name, etc.)
     else:
         print(f"Failed to connect: {response.json()}")
@@ -46,15 +49,13 @@ if os.path.exists(info_file_path):
 else:
     data = {
         "ID": None,
-        "name": None,
-        "globalscore": 0,
-        "money": 0,
-        "skins": []
+        "name": None
     }
 
 # If there's no name and ID, this is the player's first time
 if PLAYERNAME is None or PLAYERID is None:
     PLAYERNAME = input("Before starting this game for the first time, you may want to enter a name. You will not be able to change it: ")
+    print("Please wait while we connect you to the server...")
     PLAYERNAME = PLAYERNAME.strip('"')  # Remove any quotes around the name
     data['name'] = PLAYERNAME  # Save the player's name
     data['ID'] = None  # Keep ID as None until server responds
@@ -70,63 +71,114 @@ if PLAYERNAME is None or PLAYERID is None:
             json.dump(data, file, indent=4)
 else:
     print(f"Welcome back, {PLAYERNAME}!")
+    print("Please wait while we connect you to the server...")
+    connect_to_server(player_name=PLAYERNAME, player_id=PLAYERID)
     
 
 
+def request_player_data():
+    if os.path.exists(info_file_path):
+        with open(info_file_path, 'r') as file:
+            data = json.load(file)
+            plid = data.get('ID')
+            SOCKET.emit("request_player_data", {"ID": plid})
+           
+
 # Step 2: Use socket.io to join the lobby
-def join_lobby(socket, player_id):
+def join_lobby():
     # Once connected, join the lobby
-    socket.emit("join_lobby", {"ID": player_id})
+    SOCKET.emit("join_lobby", {"ID": PLAYERID})
 
 # Step 3: Set up socket.io client
-def run_socket_client(player_id):
-    # Initialize SocketIO client
-    global socket
-    socket = Client()
+
+def run_socket_client():
+    # Initialize SocketIO client 
+    global SOCKET
+    SOCKET = Client()
 
     
     # Connect to the server
-    socket.connect(SERVER_URL)
+    SOCKET.connect(SERVER_URL)
 
-    # Join lobby after connection
-    join_lobby(socket, player_id)
 
-    # Listen for updates
-    @socket.on('update_status')
-    def on_status_update(data):
-        print(f"Player {data['ID']} status: {data['status']}")
+    @SOCKET.on("receive_player_data")
+    def on_receive_player_data(data):
+        global rpldata_flag, MYDATA
+        if "error" in data:
+            print("Error:", data["error"])
+        else:
+            rpldata_flag = True
+            MYDATA = data
 
-    # Keep the connection alive
-    socket.wait()
 
-def disconnect_from_server(player_id, socket):
+
+
+    request_player_data()
+
+    SOCKET.wait()
+
+
+
+def disconnect_from_server(player_id, socket=None):
     payload = {
         "ID": player_id
     }
     response = requests.post(f"{SERVER_URL}/leave", json=payload)
 
     if response.status_code == 200:
-        print("Disconnected successfully from HTTP server!")
         
         # Now disconnect from SocketIO server
-        socket.disconnect()
-        print("Disconnected from Socket.IO server!")
+        if socket is not None:
+            socket.disconnect()
+            
     else:
         print(f"Failed to disconnect from HTTP server: {response.json()}")
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class Main:
-    def __init__(self, wnw, wnh):
+    def __init__(self, wnw, wnh, globalscore, money, skins, name):
         self.wnw = wnw
         self.wnh = wnh
         self.window = pygame.display.set_mode((wnw, wnh))
         self.running = True
         self.location = 'WELCOME'
-        with open(os.path.join(script_dir, '..', 'appdata', 'myinfo.json'), 'r') as file:
-            data = json.load(file)
-            self.PlayerInfo = data
-            self.coins = data.get('money', 0)
         self.font_cache = {}
         self.fps = 70
         self.clock = pygame.time.Clock()
@@ -136,6 +188,10 @@ class Main:
         self.can_click = True  
         self.menu_data = None
         self.bg_music_playing = False
+        self.globalscore = globalscore
+        self.coins = money
+        self.name = name
+        self.skins = skins
 
     def get_font(self, size):
         if size not in self.font_cache:
@@ -274,7 +330,8 @@ class Main:
     def __drawInputs__(self, inputs):
         for input in inputs:
             font = self.get_font(input['txtsize'])
-            surf_text = font.render(input['placeholder'], True, input['txtcolor'])
+            text = input["placeholder"].replace("<yourname>", self.name)
+            surf_text = font.render(text, True, input['txtcolor'])
             pygame.draw.rect(self.window, input['bgcolor'], (input['attributes'].x, input['attributes'].y, input['attributes'].w, input['attributes'].h))
             self.window.blit(surf_text, (input['attributes'].x + input['attributes'].w/2 - surf_text.get_width()/2, input['attributes'].y + input['attributes'].h/2 - surf_text.get_height()/2))
 
@@ -366,15 +423,17 @@ class Main:
 
 
 if __name__ == "__main__":
-    GameInstance = Main(900, 600)
+    socket_thread = threading.Thread(target=run_socket_client)
+    socket_thread.start()
+    while rpldata_flag == False:
+        pass
+    print("Connected!")
+    GameInstance = Main(900, 600, MYDATA['score'], MYDATA['money'], MYDATA['skins'], MYDATA['name'])
     while GameInstance.running:
         GameInstance.__render__(next((menu for menu in ALL_MENUS if menu.__getInfo__()['Name'] == GameInstance.location), None))
         GameInstance.__listenToEvents__()
         pygame.display.flip()
 
-    GameInstance.PlayerInfo['money'] = GameInstance.coins
-
-    with open(os.path.join(script_dir, '..', 'appdata', 'myinfo.json'), 'w') as file:
-        json.dump(GameInstance.PlayerInfo, file, indent=4)
-
+    PLAYERID = MYDATA['ID']
+    disconnect_from_server(PLAYERID, SOCKET)
     pygame.quit()

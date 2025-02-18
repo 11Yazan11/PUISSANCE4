@@ -43,8 +43,7 @@ def reinitWelcome():
     WELCOMEMENU.__addText__('---------------------------', 31, 370, (200, 200, 210), 30, True)
     WELCOMEMENU.__addText__('<rank> | You ~~~ <score>', 29, 400, (100, 200, 121), 24, True, 'Playerscore')
 
-    WELCOMEMENU.__addText__('Your Name', 684, 110, (220, 100, 250), 30, True)
-    WELCOMEMENU.__addInput__('Enter a definive name...', 637, 160, 200, 40, (200, 200, 200), (0, 0, 0), 20)
+    WELCOMEMENU.__addInput__('<yourname>', 637, 130, 200, 40, (200, 200, 200), (0, 0, 0), 20)
    
 
 
