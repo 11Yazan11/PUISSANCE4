@@ -2,6 +2,7 @@ from gameimports import *
 pygame.init()
 
 
+
 class Main:
     def __init__(self, wnw, wnh):
         self.wnw = wnw
@@ -9,7 +10,10 @@ class Main:
         self.window = pygame.display.set_mode((wnw, wnh))
         self.running = True
         self.location = 'WELCOME'
-        self.coins = 0
+        with open(os.path.join(script_dir, '..', 'appdata', 'myinfo.json'), 'r') as file:
+            data = json.load(file)
+            self.PlayerInfo = data
+            self.coins = data.get('money', 0)
         self.font_cache = {}
         self.fps = 70
         self.clock = pygame.time.Clock()
@@ -137,22 +141,30 @@ class Main:
             font = self.get_font(text['size'])
             surf_text = font.render(updated_text, True, text['color'])
             if text['display']:
-                self.window.blit(surf_text, (text['x'], text['y'])) 
+                if text['center'] == True:
+                    self.window.blit(surf_text, (text['x'] - surf_text.get_width()/2, text['y']))
+                else:
+                    self.window.blit(surf_text, (text['x'], text['y']))
+                
 
     def __reinit_game__(self):
         REINIT_ALL_DATA()
+        self.playInstance.cursor_timer = 101
+        self.playInstance.update()
         self.playInstance = Game(self)
         self.playInstance.update()
-        self.location = "WELCOME"
+        self.location = "GAMECHOICE"
         pygame.mixer.music.stop()
         self.bg_music_playing = False
         self.jetons = []
     
     def __reinit_PVE_game__(self):
         REINIT_ALL_DATA()
+        self.pveInstance.cursor_timer = 101
+        self.pveInstance.update()
         self.pveInstance = PVEGame(self)
         self.pveInstance.update()
-        self.location = "WELCOME"
+        self.location = "GAMECHOICE"
         pygame.mixer.music.stop()
         self.bg_music_playing = False
         self.jetons = []
@@ -217,3 +229,10 @@ if __name__ == "__main__":
         GameInstance.__render__(next((menu for menu in ALL_MENUS if menu.__getInfo__()['Name'] == GameInstance.location), None))
         GameInstance.__listenToEvents__()
         pygame.display.flip()
+
+    GameInstance.PlayerInfo['money'] = GameInstance.coins
+
+    with open(os.path.join(script_dir, '..', 'appdata', 'myinfo.json'), 'w') as file:
+        json.dump(GameInstance.PlayerInfo, file, indent=4)
+
+    pygame.quit()

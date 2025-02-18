@@ -11,11 +11,12 @@ WELCOMEMENU_OBJS = [[10, 0, 880, 10, (0, 0, 0), False, None, (0, 0)],
                     [890, 0, 10, 590, (0, 0, 0), False, None, (0, 0)],
                     [0, 590, 900, 10, (0, 0, 0), False, None, (0, 0)],
                     [310, 358, 287, 103, (0, 0, 0), 'Btnplay', None, (0, 0), True],
-                    [370, 120, (400/7)*3, (444/7+4)*3, (0, 0, 0), False, os.path.join(script_dir, "..", "images", "p4", "default.png"), (0, 0)],
+                    [17, 105, 220, 340, (50, 20, 20), False, None, (0, 0)],
+                    [370, 120, (400/7)*3, (444/7+4)*3, (0, 0, 0), False, os.path.join(script_dir, "..", "images", "p4", "default.png"), (0, 2), (0, 8)],
                     ]
 def reinitWelcome():
     global WELCOMEMENU
-    WELCOMEMENU = Menu('WELCOME', (10, 10, 10), os.path.join(script_dir, "..", "images", "p4", "Menus", "mBase.png"), song=os.path.join(script_dir, "..", "sounds", "home.mp3"))
+    WELCOMEMENU = Menu('WELCOME', (10, 10, 10), os.path.join(script_dir, "..", "images", "p4", "Menus", "mBase.png"), song=os.path.join(script_dir, "..", "sounds", "home.mp3")) #
     for obj in WELCOMEMENU_OBJS:
         WELCOMEMENU.__addObject__({"x":obj[0], "y":obj[1],
                                "w":obj[2], "h":obj[3],
@@ -23,7 +24,12 @@ def reinitWelcome():
                                "vecxy":obj[7], "lim":obj[-1] if len(obj) == 9 else obj[-2] if len(obj) == 10 else None,
                                "name":obj[-1] if len(obj) == 10 else None}, 
                                clickable=obj[5])
-    WELCOMEMENU.__addText__('€', 54, 29, (50, 50, 50), 60, True, 'GeneralMoneyDisplay')
+    WELCOMEMENU.__addText__('€', 63, 34, (50, 50, 50), 40, True, 'GeneralMoneyDisplay', center=True)
+    WELCOMEMENU.__addText__('Monthly Scores', 51, 130, (200, 200, 210), 30, True, 'Scores')
+    WELCOMEMENU.__addText__('---------------------------', 31, 150, (200, 200, 210), 30, True)
+    WELCOMEMENU.__addText__('---------------------------', 31, 330, (200, 200, 210), 30, True)
+    WELCOMEMENU.__addText__('You', 106, 360, (200, 200, 210), 30, True, 'Playerscore')
+   
 
 
 shade = lambda v: [620+v, 0+v, 280-v*2, 270-v*2, (int(5+v/5), int(8+v/5), int(15+v/5)), False, None, (0, 0)]

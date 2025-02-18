@@ -55,7 +55,7 @@ class PVEGame(Game):
         board_str = "".join(["".join(map(str, row)) for row in self.game_grid])
 
         url = "https://kevinalbs.com/connect4/back-end/index.php/getMoves"
-        params = {'board_data': board_str}
+        params = {'board_data': board_str, 'player': 2}
         response = requests.get(url, params=params)
     
         if response.status_code == 200:
