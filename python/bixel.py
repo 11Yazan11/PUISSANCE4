@@ -53,9 +53,8 @@ class Bixel:
         
 
         if self.rect.y >= self.ground_level:
-            if not self.has_switched_faces_flag:
+            if not self.has_switched_faces_flag and self.color != (0, 100, 0):
                 self.has_switched_faces_flag = True
-                print(self.color)
                 clr = "red" if self.color == (82, 71, 64) else "blue"
                 self.set_image(os.path.join(self.script_dir, "..", "images", "p4", "skins", "goofy", f"{clr}-goofy-d.png"))
             self.velocity_y = -self.velocity_y * self.elasticity  # Bounce back with reduced energy

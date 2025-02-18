@@ -76,6 +76,7 @@ class Game:
     def change_color(self, bixel):
         if bixel.image is not None:
             bixel.set_image(os.path.join(script_dir, "..", "images", "p4", "skins", "goofy", "green-goofy.png"))
+            bixel.color = (0, 100, 0)
   
     def update(self):
         winning_positions = self.gagne()

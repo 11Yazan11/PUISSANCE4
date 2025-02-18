@@ -71,11 +71,17 @@ class PVEGame(Game):
 
         # Place the AI move on the board
         if self.colonne_libre(self.game_grid, ai_move):
+
+            #bixel and move
             row = next((r for r in range(5, -1, -1) if self.game_grid[r][ai_move] == 0), -1)
-            bixeltoappend = Bixel(self.main, ((ai_move+1) * (442/7)) + 19, 100, self.jeton_color(2), ai_move, (row, ai_move), os.path.join(script_dir, "..", "images", "p4", "skins", "goofy", "blue-goofy.png"))
+            bixeltoappend = Bixel(self.main, ((ai_move+1) * (442/7)) + 19, 98, self.jeton_color(2), ai_move, (row, ai_move), os.path.join(script_dir, "..", "images", "p4", "skins", "goofy", "blue-goofy.png"))
             self.main.jetons.append(bixeltoappend)
             self.game_grid = self.place_jeton(self.game_grid, ai_move, 2, 6)
             self.turn = 1  # Give turn back to the player
+
+
+
+            #cursor related
             elements = PVEMENU.__getInfo__()['Elements']
             cursor = next((element for element in elements if element['name'] == 'cursor'), None)
             cursorExt = next((element for element in elements if element['name'] == 'cursorExtension'), None)
@@ -102,8 +108,11 @@ class PVEGame(Game):
                 cursorExtP = cursorExt['attributes']
                 caseWidth = 442/7
                 case = int(min(max(event.pos[0]-15, 120), 484)//caseWidth)
+
                 if not self.colonne_libre(self.game_grid, case-1):
                     return
+                
+
                 cursorP.x = (case*caseWidth)+32
                 cursorExtP.x = cursorP.x + 5
                 self.cursorOgVector = cursor['vector']
@@ -113,9 +122,9 @@ class PVEGame(Game):
                 row = next((r for r in range(5, -1, -1) if self.game_grid[r][case-1] == 0), -1)
                 col = case - 1
                 color = 'red' if self.turn == 1 else 'blue' 
-                bixeltoappend = Bixel(self.main, ((min(max(event.pos[0]-15, 120), 484)//caseWidth)*caseWidth)+19, cursorP.y+30, self.jeton_color(self.turn), case-1, (row, col), os.path.join(script_dir, "..", "images", "p4", "skins", "goofy", f"{color}-goofy.png"))
+                bixeltoappend = Bixel(self.main, case * (442/7) + 19, 98, self.jeton_color(self.turn), case-1, (row, col), os.path.join(script_dir, "..", "images", "p4", "skins", "goofy", f"{color}-goofy.png"))
                 self.main.jetons.append(bixeltoappend)
-                self.game_grid = self.place_jeton(self.game_grid, case-1, self.turn, 6)
+                self.game_grid = self.place_jeton(self.game_grid, col, self.turn, 6)
                 self.turn = 1 if self.turn == 2 else 2
                 self.ai_turn_pending = True  # Set the flag that AI should take its turn
                 self.waiting_for_cursor = True
