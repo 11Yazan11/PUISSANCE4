@@ -56,6 +56,7 @@ else:
 if PLAYERNAME is None or PLAYERID is None:
     PLAYERNAME = input("Before starting this game for the first time, you may want to enter a name. You will not be able to change it: ")
     PLAYERNAME = PLAYERNAME.strip('"')  # Remove any quotes around the name
+    data['name'] = PLAYERNAME  # Save the player's name
     data['ID'] = None  # Keep ID as None until server responds
 
     # Send the player's name to the server to create the account
