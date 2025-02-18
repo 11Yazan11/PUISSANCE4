@@ -2,6 +2,118 @@ from gameimports import *
 pygame.init()
 
 
+SERVER_URL = "http://localhost:5000"
+
+script_dir = os.path.dirname(os.path.abspath(__file__))  # Get the directory of the script
+info_file_path = os.path.join(script_dir, '..', 'appdata', 'myinfo.json')
+
+
+
+
+# Step 1: Connect to the server (POST request to '/connect')
+def connect_to_server(player_name, player_id=None):
+    
+    if not player_id:
+        # New player, only send the name to the server
+        payload = {
+            "name": player_name,
+        }
+    else:
+        # Returning player, send both ID and name (name is retrieved from file)
+        payload = {
+            "ID": player_id,
+            "name": player_name,
+        }
+
+    response = requests.post(f"{SERVER_URL}/connect", json=payload)
+    
+
+    if response.status_code == 200:
+        data = response.json()
+        print(f"Connected successfully! Player ID: {data.get('ID')}, Name: {data.get('name')}")
+        return data  # Returning player data for further use (ID, name, etc.)
+    else:
+        print(f"Failed to connect: {response.json()}")
+        return None
+
+
+
+if os.path.exists(info_file_path):
+    with open(info_file_path, 'r') as file:
+        data = json.load(file)
+        PLAYERNAME = data.get('name')
+        PLAYERID = data.get('ID')
+else:
+    data = {
+        "ID": None,
+        "name": None,
+        "globalscore": 0,
+        "money": 0,
+        "skins": []
+    }
+
+# If there's no name and ID, this is the player's first time
+if PLAYERNAME is None or PLAYERID is None:
+    PLAYERNAME = input("Before starting this game for the first time, you may want to enter a name. You will not be able to change it: ")
+    PLAYERNAME = PLAYERNAME.strip('"')  # Remove any quotes around the name
+    data['ID'] = None  # Keep ID as None until server responds
+
+    # Send the player's name to the server to create the account
+    player_data = connect_to_server(player_name=PLAYERNAME)
+    
+    if player_data:
+        # Update the local player info with the returned ID
+        data['ID'] = player_data['ID']
+        # Save the player data to the JSON file for future use
+        with open(info_file_path, 'w') as file:
+            json.dump(data, file, indent=4)
+else:
+    print(f"Welcome back, {PLAYERNAME}!")
+    
+
+
+# Step 2: Use socket.io to join the lobby
+def join_lobby(socket, player_id):
+    # Once connected, join the lobby
+    socket.emit("join_lobby", {"ID": player_id})
+
+# Step 3: Set up socket.io client
+def run_socket_client(player_id):
+    # Initialize SocketIO client
+    global socket
+    socket = Client()
+
+    
+    # Connect to the server
+    socket.connect(SERVER_URL)
+
+    # Join lobby after connection
+    join_lobby(socket, player_id)
+
+    # Listen for updates
+    @socket.on('update_status')
+    def on_status_update(data):
+        print(f"Player {data['ID']} status: {data['status']}")
+
+    # Keep the connection alive
+    socket.wait()
+
+def disconnect_from_server(player_id, socket):
+    payload = {
+        "ID": player_id
+    }
+    response = requests.post(f"{SERVER_URL}/leave", json=payload)
+
+    if response.status_code == 200:
+        print("Disconnected successfully from HTTP server!")
+        
+        # Now disconnect from SocketIO server
+        socket.disconnect()
+        print("Disconnected from Socket.IO server!")
+    else:
+        print(f"Failed to disconnect from HTTP server: {response.json()}")
+
+
 
 class Main:
     def __init__(self, wnw, wnh):
@@ -100,16 +212,21 @@ class Main:
 
     def __drawTexts__(self, texts):
         for text in texts:
-            if text['string']=="C'est au joueur ... de jouer !" and self.playInstance.game_over:
+            if text['name']=="Prompt" and self.playInstance.game_over and self.location == "INGAME":
                 text['display'] = False
 
-            if text['name']=="Victory" and self.playInstance.game_over:
+            if text['name']=="Prompt" and self.pveInstance.game_over and self.location == "PVE":
+                text['display'] = False
+
+
+            if text['name']=="Victory" and self.playInstance.game_over and self.location == "INGAME":
                 text['string'] = f"Victoire du joueur {2 if self.playInstance.turn == 1 else 1} !"
                 text['display'] = True
 
-            if text['name']=="Victory" and self.pveInstance.game_over:
+            if text['name']=="Victory" and self.pveInstance.game_over and self.location == "PVE":
                 if self.pveInstance.turn == 1:
                     text['string'] = "Défaite face à l'engine!"
+                    text['color'] = (200, 0, 50)
                 elif self.pveInstance.turn == 2:
                     text['string'] = "Victoire face à l'engine!"
                 text['display'] = True
@@ -117,27 +234,34 @@ class Main:
 
     
 
-            if text['string']=="C'est au joueur ... de jouer !" and not self.playInstance.game_over:
+            if text['name']=="Prompt" and not self.playInstance.game_over and self.location == "INGAME":
                 text['display'] = True
+            if text['name']=="Prompt" and not self.pveInstance.game_over and self.location == "PVE":
+                text['display'] = True
+            
+           
 
-            if text['name']=="Victory" and not self.playInstance.game_over:
+            if text['name']=="Victory" and not self.playInstance.game_over and self.location == "INGAME":
                 text['string'] = f"Victoire du joueur {2 if self.playInstance.turn == 1 else 1} !"
                 text['display'] = False
 
-            if text['name']=="Victory" and not self.pveInstance.game_over:
+            if text['name']=="Victory" and not self.pveInstance.game_over and self.location == "PVE":
                 text['display'] = False
 
 
 
             if self.location == "INGAME":
                 updated_text = text['string'].replace('...', str(self.playInstance.turn)) 
+
             elif self.location == "PVE":
                 if text['name'] == "Prompt":
                     updated_text = "C'est à vous de jouer !" if self.pveInstance.turn == 1 else "C'est à l'engine de jouer !"
                 else:
                     updated_text = text['string']
             else:
-                updated_text = text['string'].replace('€', str(self.coins))
+                updated_text = text['string'].replace('€', f"{str(self.coins)}K")
+
+
             font = self.get_font(text['size'])
             surf_text = font.render(updated_text, True, text['color'])
             if text['display']:
@@ -145,6 +269,22 @@ class Main:
                     self.window.blit(surf_text, (text['x'] - surf_text.get_width()/2, text['y']))
                 else:
                     self.window.blit(surf_text, (text['x'], text['y']))
+
+    def __drawInputs__(self, inputs):
+        for input in inputs:
+            font = self.get_font(input['txtsize'])
+            surf_text = font.render(input['placeholder'], True, input['txtcolor'])
+            pygame.draw.rect(self.window, input['bgcolor'], (input['attributes'].x, input['attributes'].y, input['attributes'].w, input['attributes'].h))
+            self.window.blit(surf_text, (input['attributes'].x + input['attributes'].w/2 - surf_text.get_width()/2, input['attributes'].y + input['attributes'].h/2 - surf_text.get_height()/2))
+
+            if not input['focused']: # hovering
+                if input['attributes'].collidepoint(pygame.mouse.get_pos()):
+                    pygame.draw.rect(self.window, (20, 100, 50), (input['attributes'].x, input['attributes'].y, input['attributes'].w, input['attributes'].h), 4) # hovering: white frame
+                else:
+                    pygame.draw.rect(self.window, (0, 0, 0), (input['attributes'].x, input['attributes'].y, input['attributes'].w, input['attributes'].h), 4)
+
+            # Put a little dark layer over it if not focused.
+
                 
 
     def __reinit_game__(self):
@@ -209,6 +349,7 @@ class Main:
 
         self.__drawElems__(menu_data['Elements'])
         self.__drawTexts__(menu_data['Texts'])
+        self.__drawInputs__(menu_data['Inputs'])
         self.clock.tick(self.fps)
 
     def __listenToEvents__(self):

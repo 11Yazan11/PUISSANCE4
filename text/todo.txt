@@ -1,12 +1,6 @@
-PVE: WINNING TEXT.
-
-HANDLE TIE
-
 Do the SHOP.
 
-Center the money display
-
-ADD TIME TO PLAY LIKE IN CHESS
+ADD TIME TO PLAY LIKE IN CHESS.
 
 MAKE A FOLDER TO SAVE USERNAME, PLAYER INFO, .... : ONCE THE PLAYER GOES MP ONCE, THESE INFOS ARE SAVED IN THE SERVER, AND MUST ALWAYS BEEN SYNCED.
 
@@ -14,10 +8,40 @@ MAKE A FOLDER TO SAVE USERNAME, PLAYER INFO, .... : ONCE THE PLAYER GOES MP ONCE
 
 DESCRIPTION:
 
-A PLAYER DOWNLOADS THE GAME, THE APPDATA FOLDER SAVES THEIR PROGRESS ON THE COMPUTER. 
 
-A SERVER HOSTED SOMEWHERE IS AWAYS RUNNING IN CASE A PLAYER GOES MULTIPLAYER
+Here’s the plan:
 
-THERE IS A LEADERBOARD FOR PLAYERS GONE MP: EACH PLAYER THAT GOES MP ONCE IS RECENSED AND IS PUT THROUGH THE LEADERBOARD
+First-time connection: When only a name is provided (without an ID), it's a new player. The server should:
+1. Generate a new unique ID for the player.
+2. Save the player with default values (0 for money, globalscore, and an empty list for skins).
+3. Respond with the generated ID and their saved name.
 
-MONEY: MONEY CAN ONLY BE ACQUIRED BY WINNING ONLINE MATCHES AND GALAXY EVENTS
+
+Returning player: If both ID and name are provided, the server should:
+1. Check if the ID exists in the database.
+2. If the ID exists, return the player’s data (name, money, score, skins).
+3. If the ID doesn’t exist, handle it as an error or create a new player if needed.
+
+
+
+-A PLAYER LAUNCHING THE GAME FOR THE FIRST TIME = CONNECTS TO THE SERVER FOR THE FIRST TIME:
+
+GET: their ID from the server (saved definitively into appdata)
+PROVIDE: their definitive name 
+
+* The state of their money, score, and skins is at 0 if it is the first time.
+
+
+-A PLAYER LAUNCHING THE GAME ANOTHER TIME = CONNECTS TO THE SERVER:
+
+CAN QUERY TO KNOW AT ANY TIME: all their progress (money, score, skins) AND THEIR NAME WHICH IS SAVED IN THE SERVER AND CANNOT BE CHANGED.
+
+-WHEN A PURCHASE (money and skins) IS DONE:
+    The client requests it to the server which updates the MongoDB directly.
+
+-WHEN A WIN (score) HAPPENS IN A LOBBY:
+    The server updates both players' info in the MongoDB and sends for each client its new player data. 
+
+
+
+

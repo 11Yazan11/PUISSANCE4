@@ -7,6 +7,7 @@ class Menu:
         self.bg = bg
         self.all_objects = []
         self.all_texts = []
+        self.all_inputs = []
         self.image = image
         self.song = song
 
@@ -23,13 +24,17 @@ class Menu:
 
         """
         self.all_objects.append({"ogX":data['x'], "ogY":data['y'],"attributes":pygame.Rect(data["x"], data["y"], data["w"], data["h"]), "color":data["c"], "texture":data["t"], "name":data["name"], "vector": [data["vecxy"][0], data["vecxy"][1]], "limit":data["lim"],"clickable":clickable, "dontdisplay":dontdisplay})
+    
+    def __addInput__(self, placeholder:str, x:int, y:int, w:int, h:int, bgcolor:tuple, txtcolor:tuple, txtsize:int):
+        """Adds an input field to the menu. (TEXT ALWAYS CENTERED)"""
+        self.all_inputs.append({"placeholder":placeholder, "attributes":pygame.Rect(x, y, w, h), "bgcolor":bgcolor, "txtcolor":txtcolor, "txtsize":txtsize, "focused":False})
 
     def __addText__(self, string:str, x:int, y:int, color:tuple, size:int, display:bool=True, name:str=None, center:bool=False):
         """Displays a text at a position with a color at a certain size."""
         self.all_texts.append({"string":string, "x":x, "y":y, "color":color, "size":size, "display":display, "name":name, "center":center})
 
     def __getInfo__(self):
-        return {'Id':id(self),'Name':self.name, 'Bg':self.bg, 'Img':self.image, 'Sound':self.song, 'Elements':self.all_objects, 'Texts':self.all_texts}
+        return {'Id':id(self),'Name':self.name, 'Bg':self.bg, 'Img':self.image, 'Sound':self.song, 'Elements':self.all_objects, 'Texts':self.all_texts, 'Inputs':self.all_inputs}
         
     def __setInfo__(self, cat, data):
         if cat not in ('Name', 'Bg', 'Elements', 'Texts'):

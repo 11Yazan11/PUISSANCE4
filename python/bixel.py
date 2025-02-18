@@ -12,7 +12,7 @@ class Bixel:
         self.gravity = 9.81 / self.game.fps
         self.grounded = False
         self.velocity_y = 0  # Current vertical velocity
-        self.air_resistance = 0.007  # Air resistance (drag)
+        self.air_resistance = 0.0038  # Air resistance (drag)
         self.elasticity = 0.4  # Coefficient of restitution (bounciness)
         self.rect = pygame.Rect(x, y, self.size[0], self.size[1])
         self.ground_level = 500-math.floor(self.size[1])
@@ -60,7 +60,7 @@ class Bixel:
             self.velocity_y = -self.velocity_y * self.elasticity  # Bounce back with reduced energy
             self.rect.y = self.ground_level
             # Stop tiny oscillations when nearly at rest
-            if abs(self.velocity_y) < 0.5:
+            if abs(self.velocity_y) < 0.2:
                 self.velocity_y = 0
                 self.grounded = True
         elif not self.grounded:

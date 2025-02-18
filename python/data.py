@@ -1,5 +1,13 @@
 from menues import Menu
 import os
+from datetime import datetime
+
+from datetime import datetime
+
+current_month_abbr = datetime.now().strftime("%b")
+
+
+
 
 
 
@@ -12,11 +20,12 @@ WELCOMEMENU_OBJS = [[10, 0, 880, 10, (0, 0, 0), False, None, (0, 0)],
                     [0, 590, 900, 10, (0, 0, 0), False, None, (0, 0)],
                     [310, 358, 287, 103, (0, 0, 0), 'Btnplay', None, (0, 0), True],
                     [17, 105, 220, 340, (50, 20, 20), False, None, (0, 0)],
-                    [370, 120, (400/7)*3, (444/7+4)*3, (0, 0, 0), False, os.path.join(script_dir, "..", "images", "p4", "default.png"), (0, 2), (0, 8)],
+                    [610, 85, 250, 150, (50, 20, 20), False, None, (0, 0)],
+                    [370, 125, (400/7)*3, (444/7+4)*3, (0, 0, 0), False, os.path.join(script_dir, "..", "images", "p4", "default.png"), (0, 2), (0, 8)],
                     ]
 def reinitWelcome():
     global WELCOMEMENU
-    WELCOMEMENU = Menu('WELCOME', (10, 10, 10), os.path.join(script_dir, "..", "images", "p4", "Menus", "mBase.png"), song=os.path.join(script_dir, "..", "sounds", "home.mp3")) #
+    WELCOMEMENU = Menu('WELCOME', (10, 10, 10), os.path.join(script_dir, "..", "images", "p4", "Menus", "mBase.png"), song=os.path.join(script_dir, "..", "sounds", "home.mp3")) 
     for obj in WELCOMEMENU_OBJS:
         WELCOMEMENU.__addObject__({"x":obj[0], "y":obj[1],
                                "w":obj[2], "h":obj[3],
@@ -25,10 +34,17 @@ def reinitWelcome():
                                "name":obj[-1] if len(obj) == 10 else None}, 
                                clickable=obj[5])
     WELCOMEMENU.__addText__('€', 63, 34, (50, 50, 50), 40, True, 'GeneralMoneyDisplay', center=True)
-    WELCOMEMENU.__addText__('Monthly Scores', 51, 130, (200, 200, 210), 30, True, 'Scores')
+    WELCOMEMENU.__addText__(f'Monthly Scores ({current_month_abbr}.)', 27, 125, (200, 200, 210), 28, True, 'Scores')
     WELCOMEMENU.__addText__('---------------------------', 31, 150, (200, 200, 210), 30, True)
-    WELCOMEMENU.__addText__('---------------------------', 31, 330, (200, 200, 210), 30, True)
-    WELCOMEMENU.__addText__('You', 106, 360, (200, 200, 210), 30, True, 'Playerscore')
+    WELCOMEMENU.__addText__('1. | <name> ~~~ <score>', 29, 200, (160, 150, 21), 24, True, 'Playerscore')
+    WELCOMEMENU.__addText__('2. | <name> ~~~ <score>', 29, 240, (100, 100, 100), 24, True, 'Playerscore')
+    WELCOMEMENU.__addText__('3. | <name> ~~~ <score>', 29, 280, (80, 80, 1), 24, True, 'Playerscore')
+    WELCOMEMENU.__addText__('4. | <name> ~~~ <score>', 29, 320, (50, 50, 121), 24, True, 'Playerscore')
+    WELCOMEMENU.__addText__('---------------------------', 31, 370, (200, 200, 210), 30, True)
+    WELCOMEMENU.__addText__('<rank> | You ~~~ <score>', 29, 400, (100, 200, 121), 24, True, 'Playerscore')
+
+    WELCOMEMENU.__addText__('Your Name', 684, 110, (220, 100, 250), 30, True)
+    WELCOMEMENU.__addInput__('Enter a definive name...', 637, 160, 200, 40, (200, 200, 200), (0, 0, 0), 20)
    
 
 
@@ -90,7 +106,7 @@ GAMECHOICEMENU_OBJS = [[10, 0, 880, 10, (0, 0, 0), False, None, (0, 0)],
 
 def reinitGameChoice():
     global GAMECHOICEMENU
-    GAMECHOICEMENU = Menu('GAMECHOICE', (10, 10, 10), os.path.join(script_dir, "..", "images", "p4", "Menus", "mGameModes.png"))
+    GAMECHOICEMENU = Menu('GAMECHOICE', (10, 10, 10), os.path.join(script_dir, "..", "images", "p4", "Menus", "mGameModes.png"), song=os.path.join(script_dir, "..", "sounds", "home.mp3"))
     for obj in GAMECHOICEMENU_OBJS:
         GAMECHOICEMENU.__addObject__({"x":obj[0], "y":obj[1],
                                "w":obj[2], "h":obj[3],
