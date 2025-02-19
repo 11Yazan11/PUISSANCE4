@@ -188,7 +188,6 @@ def disconnect_from_server(player_id, socket=None):
 
 
 
-
 class Main:
     def __init__(self, wnw, wnh, globalscore, money, skins, name):
         self.wnw = wnw
@@ -292,6 +291,9 @@ class Main:
 
     def __drawTexts__(self, texts):
         for text in texts:
+            if text['name'] is not None:
+                if "todelete" in text['name']:
+                    MAINLOBBYMENU.__removeText__(text['name'])
             if text['name']=="Prompt" and self.playInstance.game_over and self.location == "INGAME":
                 text['display'] = False
 
@@ -335,13 +337,16 @@ class Main:
 
             if self.location == "MAINLOBBY":
                 if text['name'] == "mainlobbyplayers":
+                    text['string'] = 'In Queue:'
+                    i = 1
                     for player in players_in_main_lobby:
                         PLAYERID = MYDATA['ID']
                         if player['ID'] == PLAYERID:
                             if player['name'] == self.name:
                                 player['name'] = f"{player['name']} (vous)"
+                        MAINLOBBYMENU.__addText__(f"{player['name']}", 445, 220 + i*30, (166, 201, 85), 18, center=True, name=f"todelete-{i}")
+                        i += 1
 
-                    text['string'] = "\n".join(player['name'] for player in players_in_main_lobby)
             if self.location == "INGAME":
                 updated_text = text['string'].replace('...', str(self.playInstance.turn)) 
 
@@ -424,6 +429,9 @@ class Main:
         for bixel in self.jetons:
                 bixel.update()
 
+
+        if self.location == "MAINLOBBY":
+            Delay(request_inlobby_players).set_timeout(1)
         if self.location == "WELCOME":
             self.jetons = []
 

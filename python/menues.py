@@ -29,10 +29,17 @@ class Menu:
         """Adds an input field to the menu. (TEXT ALWAYS CENTERED)"""
         self.all_inputs.append({"placeholder":placeholder, "attributes":pygame.Rect(x, y, w, h), "bgcolor":bgcolor, "txtcolor":txtcolor, "txtsize":txtsize, "focused":False})
 
+
     def __addText__(self, string:str, x:int, y:int, color:tuple, size:int, display:bool=True, name:str=None, center:bool=False):
         """Displays a text at a position with a color at a certain size."""
         self.all_texts.append({"string":string, "x":x, "y":y, "color":color, "size":size, "display":display, "name":name, "center":center})
 
+    def __removeText__(self, name):
+        for text in self.all_texts:
+            if text["name"] == name:
+                self.all_texts.remove(text)
+                return
+            
     def __getInfo__(self):
         return {'Id':id(self),'Name':self.name, 'Bg':self.bg, 'Img':self.image, 'Sound':self.song, 'Elements':self.all_objects, 'Texts':self.all_texts, 'Inputs':self.all_inputs}
         
