@@ -92,6 +92,7 @@ def request_inlobby_players():
 
 def join_main_lobby():
     SOCKET.emit("join_main_lobby", {"ID": PLAYERID})
+
     
 
 
@@ -328,6 +329,10 @@ class Main:
                 text['display'] = False
 
 
+            if self.location == "WELCOME":
+                if text['name'] == "Myscore":
+                    text['string'] = text['string'].replace('<score>', str(self.globalscore))
+
             if self.location == "MAINLOBBY":
                 if text['name'] == "mainlobbyplayers":
                     for player in players_in_main_lobby:
@@ -340,13 +345,14 @@ class Main:
             if self.location == "INGAME":
                 updated_text = text['string'].replace('...', str(self.playInstance.turn)) 
 
-            elif self.location == "PVE":
+            if self.location == "PVE":
                 if text['name'] == "Prompt":
                     updated_text = "C'est à vous de jouer !" if self.pveInstance.turn == 1 else "C'est à l'engine de jouer !"
                 else:
                     updated_text = text['string']
             else:
                 updated_text = text['string'].replace('€', f"{str(self.coins)}K")
+                
 
 
             font = self.get_font(text['size'])

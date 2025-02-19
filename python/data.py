@@ -36,12 +36,12 @@ def reinitWelcome():
     WELCOMEMENU.__addText__('€', 63, 34, (50, 50, 50), 40, True, 'GeneralMoneyDisplay', center=True)
     WELCOMEMENU.__addText__(f'Monthly Scores ({current_month_abbr}.)', 27, 125, (200, 200, 210), 28, True, 'Scores')
     WELCOMEMENU.__addText__('---------------------------', 31, 150, (200, 200, 210), 30, True)
-    WELCOMEMENU.__addText__('1. | <name> ~~~ <score>', 29, 200, (160, 150, 21), 24, True, 'Playerscore')
-    WELCOMEMENU.__addText__('2. | <name> ~~~ <score>', 29, 240, (100, 100, 100), 24, True, 'Playerscore')
-    WELCOMEMENU.__addText__('3. | <name> ~~~ <score>', 29, 280, (80, 80, 1), 24, True, 'Playerscore')
-    WELCOMEMENU.__addText__('4. | <name> ~~~ <score>', 29, 320, (50, 50, 121), 24, True, 'Playerscore')
+    WELCOMEMENU.__addText__('1. | <name> ~~~ <score>', 29, 200, (160, 150, 21), 24, True, 'Player1score')
+    WELCOMEMENU.__addText__('2. | <name> ~~~ <score>', 29, 240, (100, 100, 100), 24, True, 'Player2score')
+    WELCOMEMENU.__addText__('3. | <name> ~~~ <score>', 29, 280, (80, 80, 1), 24, True, 'Player3score')
+    WELCOMEMENU.__addText__('4. | <name> ~~~ <score>', 29, 320, (50, 50, 121), 24, True, 'Player4score')
     WELCOMEMENU.__addText__('---------------------------', 31, 370, (200, 200, 210), 30, True)
-    WELCOMEMENU.__addText__('<rank> | You ~~~ <score>', 29, 400, (100, 200, 121), 24, True, 'Playerscore')
+    WELCOMEMENU.__addText__('<rank> | You ~~~ <score>', 29, 400, (100, 200, 121), 24, True, 'Myscore')
 
     WELCOMEMENU.__addInput__('<yourname>', 637, 130, 200, 40, (200, 200, 200), (0, 0, 0), 20)
    
@@ -230,7 +230,7 @@ def reinitMainLobby():
     MAINLOBBYMENU.__addText__('MAIN ~ LOBBY', 332, 60, (100, 80, 200), 50)
     MAINLOBBYMENU.__addText__('Players online', 398, 170, (100, 100, 100), 20)
     MAINLOBBYMENU.__addText__('--------------------------------------------', 358, 186, (100, 100, 100), 20)
-    MAINLOBBYMENU.__addText__('!YOLESREUFSCOMMENTCAVADEBZ!', 445, 240, (166, 201, 85), 18, name='mainlobbyplayers', center=True)
+    MAINLOBBYMENU.__addText__('Main Lobby Players', 445, 240, (166, 201, 85), 18, name='mainlobbyplayers', center=True)
     MAINLOBBYMENU.__addText__('EXIT', 30, 18, 'red', 20)
     
 
