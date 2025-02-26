@@ -230,7 +230,7 @@ def reinitMainLobby():
     MAINLOBBYMENU.__addText__('MAIN ~ LOBBY', 332, 60, (100, 80, 200), 50)
     MAINLOBBYMENU.__addText__('Players online', 398, 170, (100, 100, 100), 20)
     MAINLOBBYMENU.__addText__('--------------------------------------------', 358, 186, (100, 100, 100), 20)
-    MAINLOBBYMENU.__addText__('Main Lobby Players', 445, 205, (166, 201, 85), 18, name='mainlobbyplayers', center=True)
+    MAINLOBBYMENU.__addText__('Main Lobby Players', 445, 205, (16, 201, 85), 18, name='mainlobbyplayers', center=True)
     MAINLOBBYMENU.__addText__('EXIT', 30, 18, 'red', 20)
     
 

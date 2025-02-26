@@ -11,6 +11,7 @@ players_in_main_lobby = []
 SOCKET = None
 PLAYERID = None
 MYDATA = None
+CURRENT_ONLINE_GAME_DATA = None
 
 
 
@@ -99,7 +100,7 @@ def join_main_lobby():
 def run_socket_client():
     # Initialize SocketIO client 
     global SOCKET, players_in_main_lobby
-    SOCKET = Client()
+    SOCKET = Client(logger=True, engineio_logger=True)
 
     
     # Connect to the server
@@ -115,6 +116,14 @@ def run_socket_client():
             rpldata_flag = True
             MYDATA = data
 
+    @SOCKET.on("start_game")
+    def on_start_game(data):
+        print('Starting a game.')
+        global GameInstance, CURRENT_ONLINE_GAME_DATA
+        CURRENT_ONLINE_GAME_DATA = data
+        print(f"Launching game {CURRENT_ONLINE_GAME_DATA}...")
+        GameInstance.location = "ONLINE"
+
     @SOCKET.on("joined_main_lobby")
     def on_joined_main_lobby():
         request_inlobby_players()
@@ -128,8 +137,8 @@ def run_socket_client():
 
 
     request_player_data()
-
     SOCKET.wait()
+    
 
 
 
@@ -431,7 +440,7 @@ class Main:
 
 
         if self.location == "MAINLOBBY":
-            Delay(request_inlobby_players).set_timeout(1)
+            pass
         if self.location == "WELCOME":
             self.jetons = []
 
