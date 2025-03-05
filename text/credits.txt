@@ -1,12 +1,12 @@
 Song credits:
-    ...
+    Chess Type Beat - Jesús Mus1c (slowed down) 
 Image credits:
-    -no credit images.
+    -no credited images (All from Bastien).
     -free copyrights.
 Api credits:
-    ...
+    https://github.com/kevinAlbs/connect4
 Server/multiplayer credits:
-    ...
+    Florian, Mango DB Atlas.
 Liscence:
     ...
 

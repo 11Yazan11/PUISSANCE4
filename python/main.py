@@ -2,7 +2,7 @@ from gameimports import *
 pygame.init()
 
 
-SERVER_URL = "http://localhost:5000"
+SERVER_URL = "http://[2a01:e0a:aa9:98a0:b25a:daff:fed2:9374]:45657"
 
 script_dir = os.path.dirname(os.path.abspath(__file__))  # Get the directory of the script
 info_file_path = os.path.join(script_dir, '..', 'appdata', 'myinfo.json')
@@ -100,7 +100,7 @@ def join_main_lobby():
 def run_socket_client():
     # Initialize SocketIO client 
     global SOCKET, players_in_main_lobby
-    SOCKET = Client(logger=True, engineio_logger=True)
+    SOCKET = Client()
 
     
     # Connect to the server

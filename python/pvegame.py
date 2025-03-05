@@ -54,7 +54,7 @@ class PVEGame(Game):
         if self.turn != 2: return
         board_str = "".join(["".join(map(str, row)) for row in self.game_grid])
 
-        url = "https://kevinalbs.com/connect4/back-end/index.php/getMoves"
+        url = "https://github.com/kevinAlbs/connect4"
         params = {'board_data': board_str, 'player': 2}
         response = requests.get(url, params=params)
     

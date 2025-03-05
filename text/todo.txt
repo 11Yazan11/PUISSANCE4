@@ -1,10 +1,8 @@
 Do the SHOP.
 
 ADD TIME TO PLAY LIKE IN CHESS.
-
-MAKE A FOLDER TO SAVE USERNAME, PLAYER INFO, .... : ONCE THE PLAYER GOES MP ONCE, THESE INFOS ARE SAVED IN THE SERVER, AND MUST ALWAYS BEEN SYNCED.
-
-
+ 
+--------------------------------------------------------------------
 
 DESCRIPTION:
 

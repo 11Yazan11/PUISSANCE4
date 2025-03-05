@@ -1,4 +1,12 @@
 pygame
 threading
 requests
-
+socketio
+requests
+json
+time
+flask-socketio
+sys
+os
+datetime
+math
