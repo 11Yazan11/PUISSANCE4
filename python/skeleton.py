@@ -11,17 +11,17 @@ def grille_init(w:int, h:int):
 def affiche_grille(tab:list, joueur=None, egalite=False) -> None:
     """Affiche la grille dans un format lisible et esthétique."""
     #IL EST POSSIBLE D'UTILISER CETTE METHODE POUR SEULEMENT AFFICHER LA GRILLE SANS DEMANDE DE JEU
-    separator_length = ((w * 4) + 1)
+    separator_length = ((w * 4) + 1) # Longueur de la ligne de séparation
     os.system('cls' if os.name == 'nt' else 'clear')  # Efface l'écran pour une mise à jour visuelle
-    print('\033[1;35m<PROJECT GALAXY MADNESS>\033[0m')
+    print('\033[1;35m<PROJECT GALAXY MADNESS>\033[0m') # Affiché en violet 
     print()
     print('-' * separator_length) # Ligne de séparation initiale
     print('+' + ('---+' * w)) # Ligne de spéparation intermédaire
-    for row in tab:
-        if egalite:
+    for row in tab: # Pour chaque ligne
+        if egalite: # Si égalité, on affiche toute la grille en orange/jaune
             print('\033[1;33m| ' + ' | '.join(" " if int(cell)==0 else "\033[2;36mX\033[0m" if int(cell)==1 else "\033[2;31mO\033[0m" for cell in row) + ' |')
             print('+' + ('---+' * w)) # Ligne de spéparation intermédaire
-        else:
+        else:   # Sinon on affiche la grille normalement
             print('| ' + ' | '.join(" " if int(cell)==0 else "\033[2;36mX\033[0m" if int(cell)==1 else "\033[2;31mO\033[0m" for cell in row) + ' |')
             print('+' + ('---+' * w)) # Ligne de spéparation intermédaire
 
@@ -84,9 +84,12 @@ def gagne(tab:list, turn:int) -> bool:
     """Fonction qui renvoie True si le joueur a gagné"""
     return (horizontale(tab, turn) or verticale(tab, turn) or diagonale(tab, turn))
     
+def egalite(tab):
+    """Fonction qui vérifie si égalité (donc si toutes les colonnes sont remplies)"""
+    return all(not colonne_libre(tab, col) for col in range(0, w))
 
-def tour_joueur(tab:list, joueur:int) -> list:
-    has_played = False
+def tour_joueur(tab:list, joueur:int) -> list: 
+    has_played = False 
     if gagne(tab, 1):
         affiche_grille(tab)
         print(f"\033[1;32mVICTOIRE DU JOUEUR 1!\033[0m")
@@ -100,6 +103,7 @@ def tour_joueur(tab:list, joueur:int) -> list:
         print(f"\033[1;35mOOPS, EGALITE! PAS DE VAINQEUR!\033[0m")
         return "end"
 
+    # Tant que le joueur n'a pas joué, sous-entendu "correctement".
     while not has_played:
         col = affiche_grille(tab, joueur)
         try:
@@ -120,17 +124,15 @@ def tour_joueur(tab:list, joueur:int) -> list:
             time.sleep(3)
                 
             
-        
+    
 
-def egalite(tab):
-    return all(not colonne_libre(tab, col) for col in range(0, w))
-
-def jouer(tab, joueur):
+def jouer(tab, joueur): 
+    """Boucle principale de jeu"""
     while True:
-        tab = tour_joueur(tab, joueur)
-        if tab=="end":
+        tab = tour_joueur(tab, joueur) # On appelle le tour d'un joueur à chaque boucle
+        if tab=="end": # On arrête la boucle si tour_joueur renvoie que le jeu est terminé.
             return
-        joueur = 2 if joueur == 1 else 1
+        joueur = 2 if joueur == 1 else 1 # On change le tour du joueur.
 #----------
 
 # CONSTANTES ET VARIABLES
@@ -144,6 +146,7 @@ game_grid = grille_init(w, h)
 # JEU ET BOUCLE DE JEU
 if __name__ == "__main__":
     jouer(game_grid, initial_turn)
+    # Lorsque joueur est terminé, alors le jeu est fini.
     print("---------------------")
     print()
     print("FIN DU JEU!")
