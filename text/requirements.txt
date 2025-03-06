@@ -1,5 +1,5 @@
 pygame
 requests
-socketio
+python-socketio
 requests
 flask-socketio
